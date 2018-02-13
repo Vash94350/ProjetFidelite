@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import esgi.jwm.project.loyalty.activities.CompanyFragmentActivity;
+import esgi.jwm.project.loyalty.activities.CustomerFragmentActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -40,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -98,9 +99,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position){
+                case 0:
+                    CompanyFragmentActivity companyFragmentActivity = new CompanyFragmentActivity();
+                    return companyFragmentActivity;
+                case 1:
+                    CustomerFragmentActivity customerFragmentActivity = new CustomerFragmentActivity();
+                    return customerFragmentActivity;
+                default:
+                    return null;
+            }
         }
 
         @Override
