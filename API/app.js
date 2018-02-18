@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var models = require("./models");
+models.sequelize.sync({force:true});
 
 var app = express();
 
