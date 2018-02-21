@@ -6,9 +6,23 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var persons = require('./routes/persons');
+var companies = require('./routes/companies');
 var models = require("./models");
-models.sequelize.sync({force:true});
+
+var companiesTypesArray = [ 'restauration', 'soin', 'loisirs', 'culture' ];
+models.sequelize.sync({ force: true }).then(() => {
+    companiesTypesArray.forEach(function(entry){
+       models.CompaniesTypes.findOrCreate({
+           where: {
+               typeName: entry
+           },
+           defaults: {
+               typeName: entry
+           }
+       });
+    });
+});
 
 var app = express();
 
@@ -25,7 +39,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/persons', persons);
+app.use('/companies', companies);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
