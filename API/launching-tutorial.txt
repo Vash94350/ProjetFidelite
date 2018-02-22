@@ -6,7 +6,15 @@ Sur windows :
 -> Cela lance npm install et npm start dans le dossier API
 -> une fois cela fait, n'oubliez pas d'enlever le { force: true } au sein du app.js (sinon cela effacera les tables à chaque fois)
 
-Sur tout autre support (ou si batch ne fonctionne pas) :
+Sur les autres supports :
+
+-> Allumer le serveur mysql (xampp par exemple)
+-> Cliquer sur le _server-launcher.sh
+-> Cela créer les trois bases de données
+-> Cela lance npm install et npm start dans le dossier API
+-> une fois cela fait, n'oubliez pas d'enlever le { force: true } au sein du app.js (sinon cela effacera les tables à chaque fois
+
+Si batch ou sh ne fonctionne pas :
 
 Pour pouvoir utiliser l'API,
 -> vous devez créer les trois bases de données indiquées dans le config.json (dossier : config)
