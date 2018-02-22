@@ -1,4 +1,4 @@
-package esgi.jwm.project.loyalty.activities;
+package esgi.jwm.project.loyalty.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,19 +8,17 @@ import android.view.ViewGroup;
 
 import esgi.jwm.project.loyalty.R;
 
-
 /**
- * Created by wmorgado on 13/02/2018.
+ * A placeholder fragment containing a simple view.
  */
+public class RegisterFragmentActivity extends Fragment {
 
-public class CustomerFragmentActivity extends Fragment {
-
+    public RegisterFragmentActivity() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View fragment = inflater.inflate(R.layout.fragment_customer, container, false);
-        return fragment;
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 }

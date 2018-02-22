@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/companyColor</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/yellow</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,8 +13,35 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.ButtonCompany" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/companyColor</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.ButtonCustomer" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/customerColor</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CompanyTheme" parent="AppTheme">
+        <item name="colorAccent">@color/companyColor</item>
+        <item name="android:buttonStyle">@style/AppTheme.ButtonCompany</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="AppTheme.CompanyTheme" parent="AppTheme" />
+
+    <style name="CustomerTheme" parent="AppTheme" >
+        <item name="colorAccent">@color/customerColor</item>
+        <item name="android:buttonStyle">@style/AppTheme.ButtonCustomer</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+    </style>
 
 </resources>
