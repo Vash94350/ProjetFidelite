@@ -11,21 +11,19 @@ echo - - - - - - - - - - - - - - - - - -
 
 echo - - - - - - - - - - - - - - - - - -
 IF %ERRORLEVEL% NEQ 0 GOTO ProcessErrorMysql
-echo Les trois bases de donnees existe bien sur le serveur mysql
+echo Les trois bases de donnees existent bien sur le serveur mysql
 
-pause
 echo.
 echo.
 
 echo Ouverture d'un nouveau cmd pour l'installation des dependances npm et lancement du serveur
 
-	START cmd /K "cd API && npm install && npm start"
+	START cmd /K "npm install && npm start"
 	GOTO end
 
 
-
 :ProcessErrorMysql
-echo Erreur mysql : la commande mysql n'est pas reconnu ou aucun serveur mysql n'est lance, fin du processus
+echo Erreur mysql : la commande mysql n'est pas reconnue ou aucun serveur mysql n'est lance, fin du processus
 pause
 exit /b 0 
 
