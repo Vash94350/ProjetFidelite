@@ -13,7 +13,8 @@ echo - - - - - - - - - - - - - - - - - -
 IF %ERRORLEVEL% NEQ 0 GOTO ProcessErrorMysql
 
 
-	START cmd /K "npm install && npm start"
+	START cmd /K "cd API && npm install && npm start"
+    START cmd /K "cd WebSite && npm install && npm start"
 	GOTO end
 
 

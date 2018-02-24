@@ -1,0 +1,25 @@
+﻿Sur windows :
+
+-> Allumer le serveur mysql (xampp par exemple)
+-> Le server mysql doit contenir un compte root avec null en mot de passe (si différent, le changer pour vous dans le config.json)
+-> Mettre la commande mysql dans les variables d'environnement
+-> Cliquer sur le _servers-launcher.bat
+-> Cela créer les trois bases de données
+-> Cela lance npm install et npm start dans le dossier API
+-> Cela lance npm install et npm start dans le dossier WebSite
+-> une fois cela fait, n'oubliez pas d'enlever le { force: true } au sein du app.js (sinon cela effacera les tables à chaque fois)
+-> L'API est désormais accessible au port 3000 et le site web au port 5024
+
+Si batch ou sh ne fonctionne pas :
+
+-> Créer les trois bases de données indiquées dans le config.json (dossier : config)
+    "database_development_fid", "database_test_fid", "database_production_fid"
+-> Le server mysql doit contenir un compte root avec null en mot de passe (si différent, le changer pour vous dans le config.json)
+-> Une fois celles-ci créées, se mettre dans le dossier de l'API
+-> Lancer l'API avec un "npm start", les tables vont se créer automatiquement
+-> Une fois celles-ci créées, ne pas oublier d'enlever le { force: true } au sein du app.js (sinon cela effacera les tables à chaque fois)
+-> L'api sera accessible au port 3000
+-> Se mettre dans le dossier WebSite
+-> Lancer le website avec un "npm start"
+-> Il sera accessible au port 5024
+
