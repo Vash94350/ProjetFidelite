@@ -11,12 +11,7 @@ echo - - - - - - - - - - - - - - - - - -
 
 echo - - - - - - - - - - - - - - - - - -
 IF %ERRORLEVEL% NEQ 0 GOTO ProcessErrorMysql
-echo Les trois bases de donnees existent bien sur le serveur mysql
 
-echo.
-echo.
-
-echo Ouverture d'un nouveau cmd pour l'installation des dependances npm et lancement du serveur
 
 	START cmd /K "npm install && npm start"
 	GOTO end
@@ -28,5 +23,3 @@ pause
 exit /b 0 
 
 :end
-pause
-exit /b 1

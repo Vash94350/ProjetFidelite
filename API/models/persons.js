@@ -7,10 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     firstname: { type: DataTypes.STRING, allowNull: false },
     lastname: { type: DataTypes.STRING, allowNull: false },
     sex: { type: DataTypes.CHAR(1), allowNull: false },
-    age: { type: DataTypes.INTEGER, allowNull: false },
+    birthDate: { type: DataTypes.DATEONLY, allowNull: false },
     city: { type: DataTypes.STRING, allowNull: false },
     country: { type: DataTypes.STRING, allowNull: false },
     isMailVerified: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    validationToken: { type: DataTypes.STRING, allowNull: false }
   }, {
     paranoid: true,
     freezeTableName: true

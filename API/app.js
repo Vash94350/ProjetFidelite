@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var persons = require('./routes/persons');
 var companies = require('./routes/companies');
+var email = require('./routes/email');
 var models = require("./models");
 
 var companiesTypesArray = [ 'restauration', 'soin', 'loisirs', 'culture' ];
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/persons', persons);
 app.use('/companies', companies);
+app.use('/email', email);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

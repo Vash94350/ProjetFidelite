@@ -6,7 +6,7 @@ module.exports = {
   generateTokenForUser: function(userData){
       return jwt.sign({
         'userId': userData.id,
-        'userType': (userData.age == null ? 'company' : 'person'),
+        'userType': (userData.birthDate == null ? 'company' : 'person'),
           
       }, JWT_SIGN_SECRET, {
           expiresIn: '1h'
