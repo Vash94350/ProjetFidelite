@@ -6,7 +6,7 @@ const mailerUtils = require('../utils/mailer.utils');
 const models = require('../models');
 const router = express.Router();
 
-const USER_REGEX = /^person$|^company$/;
+const USER_REGEX = /^persons$|^companies$/;
 
 router.post('/resend', function(req, res){
     const userEmail = req.body.userEmail;
@@ -17,12 +17,12 @@ router.post('/resend', function(req, res){
     }
     
     if(!USER_REGEX.test(userType)){
-        return res.status(400).json({'error': 'user type is invalid, it must be "person" or "company"'});
+        return res.status(400).json({'error': 'user type is invalid, it must be "persons" or "companies"'});
     }
     
     asyncLib.waterfall([
         function(done){
-            if("person" == userType){
+            if("persons" == userType){
                 models.Persons.findOne({
                     where: { email: userEmail }
                 }).then(function(personFound){
@@ -83,12 +83,12 @@ router.post('/verify', function(req, res){
     }
     
     if(!USER_REGEX.test(userType)){
-        return res.status(400).json({'error': 'user type is invalid, it must be "person" or "company"'});
+        return res.status(400).json({'error': 'user type is invalid, it must be "persons" or "companies"'});
     }
     
     asyncLib.waterfall([
         function(done){
-            if("person" == userType){
+            if("persons" == userType){
                 models.Persons.findOne({
                     where: { id: userId }
                 }).then(function(personFound){

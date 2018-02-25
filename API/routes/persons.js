@@ -8,6 +8,9 @@ const consts = require('../utils/const');
 const models = require('../models');
 const router = express.Router();
 
+router.post('/cors', function(req, res, next){
+   res.status(401).json({user: 'yogi'}); 
+});
 
 router.post('/login', function(req, res){
     const email = req.body.email;
@@ -47,7 +50,7 @@ router.post('/login', function(req, res){
             if(0 != personFound.isMailVerified){
                 done(personFound);
             } else {
-                return res.status(402).json({'error': 'person found but mail not verified'});
+                return res.status(403).json({'errorCode' : 'mail_not_verified', 'error': 'person found but mail not verified'});
             }
         }
     ], function(personFound){
@@ -130,7 +133,7 @@ router.post('/register', function(req, res){
             });
         },
         function(newPerson, secretToken, done){
-            mailerUtils.sendValidationEmail(newPerson.email, newPerson.id, 'person', secretToken);
+            mailerUtils.sendValidationEmail(newPerson.email, newPerson.id, 'persons', secretToken);
             done(newPerson);
         }
     ], function(newPerson){

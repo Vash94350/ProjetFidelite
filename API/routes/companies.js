@@ -47,7 +47,7 @@ router.post('/login', function(req, res){
             if(0 != companyFound.isMailVerified){
                 done(companyFound);
             } else {
-                return res.status(402).json({'error': 'company found but mail not verified'});
+                return res.status(403).json({'errorCode' : 'mail_not_verified', 'error': 'company found but mail not verified'});
             }
         }
     ], function(companyFound){
@@ -133,7 +133,7 @@ router.post('/register', function(req, res){
         },
         function(newCompany, secretToken, done){
             console.log(secretToken);
-            mailerUtils.sendValidationEmail(newCompany.email, newCompany.id, 'company', secretToken);
+            mailerUtils.sendValidationEmail(newCompany.email, newCompany.id, 'companies', secretToken);
             done(newCompany);
         }
     ], function(newCompany){

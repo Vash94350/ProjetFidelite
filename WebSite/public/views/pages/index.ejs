@@ -21,28 +21,28 @@
                     <div class="card-content">
                         <div class="row">
                             <ul class="tabs">
-                                <li class="tab col s4 offset-s2"><a class="active" href="#">particulier</a></li>
-                                <li class="tab col s4"><a href="#">entreprise</a></li>
+                                <li class="tab col s4 offset-s2"><a class="active" value="persons" href="#">particulier</a></li>
+                                <li class="tab col s4"><a href="#" value="companies">entreprise</a></li>
                             </ul>
                         </div>
                         <br>
                         <div class="row">
                             <div class="input-field">
                                 <i class="material-icons prefix">email</i>
-                                <input id="email" type="email" class="validate">
+                                <input id="emailUser" type="email" class="validate">
                                 <label for="email">Email</label>
                             </div>
                             <div class="input-field">
                                 <i class="material-icons prefix">vpn_key</i>
-                                <input id="password" type="password" class="validate">
+                                <input id="passwordUser" type="password" class="validate">
                                 <label for="password">Password</label>
                             </div>
                             <div class="form-field">
                                 <input type="checkbox" id="remember" class="blue" />
                                 <label for="remember">remember me ?</label>
                             </div><br><br>
-                            <div class="form-field"><a class="waves-effect waves-light btn cyan col s3 offset-s2">log in</a></div>
-                            <div class="form-field"><a class="waves-effect waves-light btn cyan col s3 offset-s2 ">sign in</a></div>
+                            <div class="form-field"><a id="login" action="submit" class="waves-effect waves-light btn cyan col s3 offset-s2">log in</a></div>
+                            <div class="form-field"><a id="signin" class="waves-effect waves-light btn cyan col s3 offset-s2 ">sign in</a></div>
                         </div>
                     </div>
                 </div>
@@ -51,5 +51,6 @@
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="javascripts/connection-page-actions.js"></script>
     </body>
 </html>
