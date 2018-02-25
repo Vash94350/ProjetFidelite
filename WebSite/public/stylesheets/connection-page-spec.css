@@ -29,3 +29,7 @@
   border-right: 2px solid #00bcd4; /* You need to change the colour here */
   border-bottom: 2px solid #00bcd4; /* And here */
 }
+
+.inscription-label{
+    color: #00bcd4 !important;
+}

@@ -1,4 +1,19 @@
 $(document).ready(function() {
+    // initialisation
+
+    $('.modal').modal();
+
+    $("#signin").click(function() {
+        $('#connection').fadeOut(300);
+        $('#inscription').delay(400).fadeIn(300);
+    });
+
+    $("#back-button").click(function() {
+        $('#inscription').fadeOut(300);
+        $('#connection').delay(400).fadeIn(300);
+    });
+
+
     $("#login").click(function() {
         const userType = $(".active").attr('value');
         const mail = $("#emailUser").val();
@@ -57,5 +72,4 @@ $(document).ready(function() {
             }
         });
     });
-
 });
