@@ -28,6 +28,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.google.android.gms:play-services-vision:11.8.0'
 //    compile 'com.android.support:design:26.0.0'
 
     compile 'pub.devrel.easybundler:easybundler-api:0.1.1'
