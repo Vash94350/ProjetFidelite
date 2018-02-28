@@ -3,14 +3,27 @@ $(document).ready(function() {
 
     $('.modal').modal();
 
+    $('select').material_select();
+
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15, // Creates a dropdown of 15 years to control year,
+        today: 'Today',
+        clear: 'Clear',
+        close: 'Ok',
+        format: 'yyyy-dd-mm',
+        closeOnSelect: false // Close upon selecting a date,
+    });
+
+
     $("#signin").click(function() {
-        $('#connection').fadeOut(300);
-        $('#inscription').delay(400).fadeIn(300);
+        $('#connection').fadeOut(100);
+        $('#inscription').delay(200).fadeIn(100);
     });
 
     $("#back-button").click(function() {
-        $('#inscription').fadeOut(300);
-        $('#connection').delay(400).fadeIn(300);
+        $('#inscription').fadeOut(100);
+        $('#connection').delay(200).fadeIn(100);
     });
 
 
@@ -69,6 +82,42 @@ $(document).ready(function() {
             },
             success: function (msg) {
                 Materialize.toast("Your are connected, id : " + ("persons" == userType ? msg.personId : msg.companyId), 7000);
+            }
+        });
+    });
+    
+    $("#PSIRegister").click(function(){
+        const email = $("#PSIEmailUser").val();
+        const phone = $("#PSITelephone").val();
+        const password = $("#PSIPasswordUser").val();
+        const validationPassword = $("#PSIConfPasswordUser").val();
+        const lastname = $("#PSILastname").val();
+        const firstname = $("#PSIFirstname").val();
+        const gender = $("#PSIGender").val();
+        const birthDate = $("#PSIBirthDate").val();
+        const city = $("#PSICity").val();
+        const country = $("#PSICountry").val();
+        
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'email': email,
+                'password': password,
+                'firstname': firstname,
+                'lastname': lastname,
+                'sex': gender,
+                'birthDate': birthDate,
+                'city': city,
+                'country': country,
+                'telephone': phone
+            },
+            url: "http://localhost:3000/persons/register",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(JSON.stringify(jqXHR));
+            },
+            success: function (msg) {
+                alert(JSON.stringify(msg));
             }
         });
     });

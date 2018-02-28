@@ -37,7 +37,7 @@
                             <div class="input-field">
                                 <i class="material-icons prefix">vpn_key</i>
                                 <input id="passwordUser" type="password" class="validate">
-                                <label for="password">Password</label>
+                                <label for="password">Mot de passe</label>
                             </div>
                             <div class="form-field">
                                 <input type="checkbox" id="remember" class="blue" />
@@ -58,24 +58,75 @@
                     <i class="large material-icons">arrow_back</i>
                 </a>
             </div>
-            <div class="col s12 m6 offset-m3">
-                <div class="card">
-                    <div class="card-action cyan white-text">
-                        <h3 class="center-align">Fidelity project</h3>
-                    </div>
-                    <div class="card-content">
-                        <h5 class="right-align inscription-label">Inscription d'un particulier</h5>
-                        <div class="divider"></div><br>
-                        <div class="row">
-                            <div class="input-field">
-                                <i class="material-icons prefix">email</i>
-                                <input id="emailUser" type="email" class="validate">
-                                <label for="email">Email</label>
-                            </div>
-                            <div class="input-field">
-                                <i class="material-icons prefix">vpn_key</i>
-                                <input id="passwordUser" type="password" class="validate">
-                                <label for="password">Password</label>
+            <div class="row">
+                <div class="col s6 offset-s3">
+                    <div class="card">
+                        <div class="card-action cyan white-text">
+                            <h3 class="center-align">Fidelity project</h3>
+                        </div>
+                        <div class="card-content">
+                            <h5 class="right-align inscription-label">Inscription d'un particulier</h5>
+                            <div class="divider"></div><br>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">email</i>
+                                    <input id="PSIEmailUser" type="email" class="validate">
+                                    <label for="PSIEmailUser">Email</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">phone</i>
+                                    <input id="PSITelephone" type="tel" class="validate">
+                                    <label for="PSITelephone">Telephone</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">vpn_key</i>
+                                    <input id="PSIPasswordUser" type="password" class="validate">
+                                    <label for="PSIPasswordUser">Mot de passe</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">vpn_key</i>
+                                    <input id="PSIConfPasswordUser" type="password" class="validate">
+                                    <label for="PSIConfPasswordUser">Confirmation mot de passe</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">person</i>
+                                    <input id="PSILastname" type="text">
+                                    <label for="PSILastname">Nom de famille</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">person</i>
+                                    <input id="PSIFirstname" type="text">
+                                    <label for="PSIFirstname">Prénom</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">wc</i>
+                                    <select id="PSIGender">
+                                        <option value="" disabled selected>Genre</option>
+                                        <option value="M">Homme</option>
+                                        <option value="F">Femme</option>
+                                        <option value="O">autre</option>
+                                    </select>
+                                    <label>Choix du genre</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">date_range</i>
+                                    <input id="PSIBirthDate" type="text" class="datepicker">
+                                    <label>Date de naissance</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">location_city</i>
+                                    <input id="PSICity" type="text">
+                                    <label for="PSICity">Ville</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">airplanemode_active</i>
+                                    <input id="PSICountry" type="text">
+                                    <label for="PSICountry">Pays</label>
+                                </div>
+                                <div class="row">
+                                    <div class="form-field"><a id="PSIRegister" class="waves-effect waves-light btn cyan col s3 offset-s2">register</a></div>
+                                    <div class="form-field"><a id="PSIReset" class="waves-effect waves-light modal-trigger btn cyan col s3 offset-s2" >reset</a></div>
+                                </div>
                             </div>
                         </div>
                     </div>
