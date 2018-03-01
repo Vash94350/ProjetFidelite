@@ -1,8 +1,6 @@
 $(document).ready(function() {
     // initialisation
 
-    $('.modal').modal();
-
     $('select').material_select();
 
     $('.datepicker').pickadate({
@@ -17,12 +15,22 @@ $(document).ready(function() {
 
 
     $("#signin").click(function() {
+        const userType = $(".active").attr('value');
+        if("companies" == userType){
+            $('#inscription-company').delay(200).fadeIn(100);
+        } else {
+            $('#inscription-person').delay(200).fadeIn(100);
+        }
         $('#connection').fadeOut(100);
-        $('#inscription').delay(200).fadeIn(100);
     });
 
-    $("#back-button").click(function() {
-        $('#inscription').fadeOut(100);
+    $("#person-back-button").click(function() {
+        $('#inscription-person').fadeOut(100);
+        $('#connection').delay(200).fadeIn(100);
+    });
+    
+    $("#company-back-button").click(function() {
+        $('#inscription-company').fadeOut(100);
         $('#connection').delay(200).fadeIn(100);
     });
 
