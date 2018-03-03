@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="stylesheets/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="stylesheets/connection-page-spec.css"/>
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body class="cyan lighten-4">
+
+        <% include ../partial/connection-form %>
+        <% include ../partial/person-inscription-form %>
+        <% include ../partial/company-inscription-form %>
+
+        <!--Import javascripts-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="javascripts/materialize.min.js"></script>
+        <script>
+            var autocomplete;
+            var options = {
+                types: ['address']
+            };
+            function activatePlacesSearch(){
+                const input = document.getElementById("PSICity");
+                autocomplete = new google.maps.places.Autocomplete(input, options);
+            }
+        </script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNQarOl9ARESfHtbwoYdZImhmt56FtQ4s&libraries=places&callback=activatePlacesSearch"></script>
+        <script type="text/javascript" src="javascripts/connection-page-actions.js"></script>
+    </body>
+</html>

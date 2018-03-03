@@ -1,0 +1,35 @@
+.tab a.active {
+    color: #00bcd4 !important;
+}
+.tabs .tab a:hover {
+
+}
+.tabs .tab a {
+    color: #00bcd4 !important;
+}
+.tabs .indicator{
+    background-color: #00bcd4 !important;
+}
+
+.input-field input:focus + label {
+    color: #00bcd4 !important;
+}
+
+.input-field .prefix.active{
+    color: #00bcd4 !important;
+}
+
+/* label underline focus color */
+.row .input-field input:focus {
+    border-bottom: 1px solid #00bcd4 !important;
+    box-shadow: 0 1px 0 0 #00bcd4 !important
+}
+
+.blue:checked + label:before {
+  border-right: 2px solid #00bcd4; /* You need to change the colour here */
+  border-bottom: 2px solid #00bcd4; /* And here */
+}
+
+.inscription-label{
+    color: #00bcd4 !important;
+}

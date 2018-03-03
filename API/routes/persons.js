@@ -1,22 +1,25 @@
-var express = require('express');
-var bcrypt = require('bcrypt');
-var asyncLib = require('async');
-var jwtUtils = require('../utils/jwt.utils');
-var models = require('../models');
-var router = express.Router();
+const express = require('express');
+const bcrypt = require('bcrypt');
+const asyncLib = require('async');
+const randomstring = require('randomstring');
+const jwtUtils = require('../utils/jwt.utils');
+const mailerUtils = require('../utils/mailer.utils');
+const consts = require('../utils/const');
+const models = require('../models');
+const router = express.Router();
 
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const PASSWORD_REGEX = /^(?=.*\d).{4,8}$/;
-
+router.post('/cors', function(req, res, next){
+    res.status(401).json({user: 'yogi'}); 
+});
 
 router.post('/login', function(req, res){
-    var email = req.body.email;
-    var password = req.body.password;
-    
+    const email = req.body.email;
+    const password = req.body.password;
+
     if(email == null || password == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
-    
+
     asyncLib.waterfall([
         function(done){
             models.Persons.findOne({
@@ -47,40 +50,50 @@ router.post('/login', function(req, res){
             if(0 != personFound.isMailVerified){
                 done(personFound);
             } else {
-                return res.status(402).json({'error': 'person found but mail not verified'});
+                return res.status(403).json({'errorCode' : 'mail_not_verified', 'error': 'person found but mail not verified'});
             }
         }
     ], function(personFound){
         return res.status(200).json({
-          'personId': personFound.id,
-          'token' : jwtUtils.generateTokenForUser(personFound)
+            'personId': personFound.id,
+            'token' : jwtUtils.generateTokenForUser(personFound),
+            'QRToken': jwtUtils.generateQRTokenForUser(personFound)
         });
     });
 });
 
 router.post('/register', function(req, res){
-    var email = req.body.email;
-    var password = req.body.password;
-    var telephone = req.body.telephone;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var sex = req.body.sex;
-    var age = req.body.age;
-    var city = req.body.city;
-    var country = req.body.country;
-    
-    if(email == null || password == null || telephone == null || firstname == null || lastname == null || sex == null || age == null || city == null || country == null){
+    const email = req.body.email;
+    const password = req.body.password;
+    const telephone = req.body.telephone;
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const sex = req.body.sex;
+    const birthDate = req.body.birthDate;
+
+    const streetNumber = req.body.streetNumber;
+    const route = req.body.route;
+    const city = req.body.city;
+    const state = req.body.state;
+    const zipCode = req.body.zipCode;
+    const country = req.body.country;
+
+    if(email == null || password == null || telephone == null || firstname == null || lastname == null || sex == null || birthDate == null || city == null || country == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
-    
-    if(!EMAIL_REGEX.test(email)){
+
+    if(!consts.EMAIL_REGEX.test(email)){
         return res.status(400).json({'error': 'email is invalid'});
     }
-    
-    if(!PASSWORD_REGEX.test(password)){
+
+    if(!consts.PASSWORD_REGEX.test(password)){
         return res.status(400).json({'error': 'password is invalid, password must be between 4 and 8 digits long and include at least one numeric digit'});
     }
-    
+
+    if(!consts.DATE_REGEX.test(birthDate)){
+        return res.status(400).json({'error': 'birth date is invalid, it must looks like yyyy-mm-dd'});
+    }
+
     asyncLib.waterfall([
         function(done){
             models.Persons.findOne({
@@ -102,21 +115,45 @@ router.post('/register', function(req, res){
             }
         },
         function(personFound, bcryptedPassword, done){
-            var newPerson = models.Persons.create({
+            const secretToken = randomstring.generate();
+            bcrypt.hash(secretToken, 5, function(err, bcryptedToken){
+                done(null, personFound, bcryptedPassword, secretToken, bcryptedToken);
+            });
+        },
+        function(personFound, bcryptedPassword, secretToken, bcryptedToken, done){
+            const newPlace = models.Places.create({
+                streetNumber: streetNumber,
+                route: route,
+                city: city,
+                state: state,
+                zipCode: zipCode,
+                country: country
+            }).then(function(newPlace){
+                done(null, personFound, bcryptedPassword, secretToken, bcryptedToken, newPlace.id);
+            }).catch(function(error){
+                return res.status(500).json({'error': 'cannot create a new place'})
+            });
+        },
+        function(personFound, bcryptedPassword, secretToken, bcryptedToken, placeId, done){
+            const newPerson = models.Persons.create({
                 email: email,
                 password: bcryptedPassword,
                 telephone: telephone,
                 firstname: firstname,
                 lastname: lastname,
                 sex: sex,
-                age: age,
-                city: city,
-                country: country
+                birthDate: birthDate,
+                PlaceId: placeId,
+                validationToken: bcryptedToken
             }).then(function(newPerson){
-                done(newPerson);
+                done(null, newPerson, secretToken);
             }).catch(function(error){
                 return res.status(500).json({'error': 'cannot create a new person'})
             });
+        },
+        function(newPerson, secretToken, done){
+            mailerUtils.sendValidationEmail(newPerson.email, newPerson.id, 'persons', secretToken);
+            done(newPerson);
         }
     ], function(newPerson){
         return res.status(201).json({
