@@ -16,10 +16,21 @@
         <% include ../partial/connection-form %>
         <% include ../partial/person-inscription-form %>
         <% include ../partial/company-inscription-form %>
-        
+
         <!--Import javascripts-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="javascripts/materialize.min.js"></script>
+        <script>
+            var autocomplete;
+            var options = {
+                types: ['address']
+            };
+            function activatePlacesSearch(){
+                const input = document.getElementById("PSICity");
+                autocomplete = new google.maps.places.Autocomplete(input, options);
+            }
+        </script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNQarOl9ARESfHtbwoYdZImhmt56FtQ4s&libraries=places&callback=activatePlacesSearch"></script>
         <script type="text/javascript" src="javascripts/connection-page-actions.js"></script>
     </body>
 </html>

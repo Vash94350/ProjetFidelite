@@ -106,6 +106,8 @@ $(document).ready(function() {
         const city = $("#PSICity").val();
         const country = $("#PSICountry").val();
         
+        alert(JSON.stringify(autocomplete.getPlace()));
+        
         $.ajax({
             type: 'POST',
             dataType: 'json',

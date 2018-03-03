@@ -12,11 +12,11 @@ const router = express.Router();
 router.post('/login', function(req, res){
     const email = req.body.email;
     const password = req.body.password;
-    
+
     if(email == null || password == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
-    
+
     asyncLib.waterfall([
         function(done){
             models.Companies.findOne({
@@ -52,8 +52,9 @@ router.post('/login', function(req, res){
         }
     ], function(companyFound){
         return res.status(200).json({
-          'companyId': companyFound.id,
-          'token' : jwtUtils.generateTokenForUser(companyFound)
+            'companyId': companyFound.id,
+            'token': jwtUtils.generateTokenForUser(companyFound),
+            'QRToken': jwtUtils.generateQRTokenForUser(companyFound)
         });
     });
 });
@@ -66,26 +67,32 @@ router.post('/register', function(req, res){
     const description = req.body.description;
     const siret = req.body.siret;
     const creationDate = req.body.creationDate;
+
+    const streetNumber = req.body.streetNumber;
+    const route = req.body.route;
     const city = req.body.city;
+    const state = req.body.state;
+    const zipCode = req.body.zipCode;
     const country = req.body.country;
+
     const companyType = req.body.companyType;
-    
+
     if(email == null || password == null || telephone == null || companyName == null || description == null || siret == null || creationDate == null || city == null || country == null || companyType == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
-    
+
     if(!consts.EMAIL_REGEX.test(email)){
         return res.status(400).json({'error': 'email is invalid'});
     }
-    
+
     if(!consts.PASSWORD_REGEX.test(password)){
         return res.status(400).json({'error': 'password is invalid, password must be between 4 and 8 digits long and include at least one numeric digit'});
     }
-    
+
     if(!consts.DATE_REGEX.test(creationDate)){
         return res.status(400).json({'error': 'create date is invalid, it must looks like yyyy-mm-dd'});
     }
-    
+
     asyncLib.waterfall([
         function(done){
             models.Companies.findOne({
@@ -113,6 +120,20 @@ router.post('/register', function(req, res){
             });
         },
         function(companyFound, bcryptedPassword, secretToken, bcryptedToken, done){
+            const newPlace = models.Places.create({
+                streetNumber: streetNumber,
+                route: route,
+                city: city,
+                state: state,
+                zipCode: zipCode,
+                country: country
+            }).then(function(newPlace){
+                done(null, companyFound, bcryptedPassword, secretToken, bcryptedToken, newPlace.id);
+            }).catch(function(error){
+                return res.status(500).json({'error': 'cannot create a new place'})
+            });
+        },
+        function(companyFound, bcryptedPassword, secretToken, bcryptedToken, placeId, done){
             const newCompany = models.Companies.create({
                 email: email,
                 password: bcryptedPassword,
@@ -121,8 +142,7 @@ router.post('/register', function(req, res){
                 description: description,
                 siret: siret,
                 creationDate: creationDate,
-                city: city,
-                country: country,
+                PlaceId: placeId,
                 CompaniesTypeId: companyType,
                 validationToken: bcryptedToken
             }).then(function(newCompany){
