@@ -11,7 +11,7 @@ var companies = require('./routes/companies');
 var models = require("./models");
 
 var companiesTypesArray = [ 'restauration', 'soin', 'loisirs', 'culture' ];
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync({ force: false }).then(() => {
     companiesTypesArray.forEach(function(entry){
        models.CompaniesTypes.findOrCreate({
            where: {

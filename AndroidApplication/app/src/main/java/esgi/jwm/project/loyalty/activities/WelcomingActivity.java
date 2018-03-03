@@ -13,7 +13,7 @@ import android.view.View;
 
 import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.fragments.CompanyFragment;
-import esgi.jwm.project.loyalty.fragments.CustomerFragment;
+import esgi.jwm.project.loyalty.fragments.PersonFragment;
 
 public class WelcomingActivity extends AppCompatActivity {
 
@@ -46,10 +46,6 @@ public class WelcomingActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-    }
-
-    public void showConnectionPage(View v){
-        System.out.println("showConnectionPage");
     }
 
 
@@ -89,8 +85,8 @@ public class WelcomingActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
-                    CustomerFragment customerFragment = new CustomerFragment();
-                    return customerFragment;
+                    PersonFragment personFragment = new PersonFragment();
+                    return personFragment;
 
                 case 1:
                     CompanyFragment companyFragment = new CompanyFragment();

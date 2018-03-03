@@ -11,9 +11,12 @@
     <string name="material_button_login">Login</string>
     <string name="title_activity_login">Sign in</string>
 
+    <string name="API_KEY_GOOGLE_PLACE">AIzaSyDciTjFfkGtSvX2i2E2OrM5-WNGlKO0bEs	</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="type_password">Password</string>
+    <string name="retype_password">Retype the password</string>
+
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -24,7 +27,22 @@
         completions."
     </string>
     <string name="preference_file_key">preference_file_key</string>
-    <string name="customer_or_company">customer_or_company</string>
+    <string name="person_or_company">person_or_company</string>
     <string name="title_activity_register_or_login">Login</string>
     <string name="username">username</string>
+    <string name="prompt_password_retype">Retype password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="age">Age</string>
+    <string name="select_sexe">Sexe</string>
+    <string name="prompt_telephone">Telephone</string>
+    <string name="login_or_register">login_or_register</string>
+    <string name="url_api">http://localhost:3000/</string>
+    <string name="person_id">personId</string>
+    <string name="company_id">companyId</string>
+    <string name="token">token</string>
+    <string name="error_message">error_message</string>
+    <string name="error_code">error_code</string>
+    <string name="adress_label">Enter your adress</string>
+    <string name="birthdate">Birth Date</string>
 </resources>

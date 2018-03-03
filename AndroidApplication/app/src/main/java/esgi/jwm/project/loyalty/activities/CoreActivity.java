@@ -3,45 +3,51 @@ package esgi.jwm.project.loyalty.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+import android.util.Log;
 import android.widget.Toast;
 
 import esgi.jwm.project.loyalty.R;
-import esgi.jwm.project.loyalty.data.Person;
 import esgi.jwm.project.loyalty.fragments.LoginFragment;
-import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
-import esgi.jwm.project.loyalty.serverhandler.ServerHandlerPersonTest;
+import esgi.jwm.project.loyalty.fragments.RegisterFragment;
 
 public class CoreActivity extends FragmentActivity {
-    private SharedPreferences cache;
-    public boolean customerOrCompany;
-    public long idPersonConnected;
+    public SharedPreferences cache;
+    private SharedPreferences.Editor editor;
+//    public boolean personOrCompany;
+    private boolean loginOrRegister;
+    private CoordinatorLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_or_login);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_core);
+        root = findViewById(R.id.root);
 
         cache = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        customerOrCompany = cache.getBoolean(getString(R.string.customer_or_company), false);
+        editor = cache.edit();
 
-//        if(customerOrCompany){
-//            Toast.makeText(this, "customer", Toast.LENGTH_LONG).show();
-//            setTheme(R.style.CustomerTheme);
-//        } else {
-//            Toast.makeText(this, "company", Toast.LENGTH_LONG).show();
-//            setTheme(R.style.CompanyTheme);
-//        }
 
-        setupFragment(new LoginFragment());
+        loginOrRegister = cache.getBoolean(getString(R.string.login_or_register), true);
+        if(cache.getBoolean(getString(R.string.person_or_company), false)){
+            Toast.makeText(this, "customer", Toast.LENGTH_LONG).show();
+            setTheme(R.style.CustomerTheme);
+            root.setBackgroundColor(getResources().getColor(R.color.customerColor));
+        } else {
+            Toast.makeText(this, "company", Toast.LENGTH_LONG).show();
+            setTheme(R.style.CompanyTheme);
+            root.setBackgroundColor(getResources().getColor(R.color.companyColor));
+
+        }
+
+        if(loginOrRegister)
+            setupFragment(new LoginFragment());
+        else
+            setupFragment(new RegisterFragment());
     }
 
     @Override
@@ -52,16 +58,28 @@ public class CoreActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(customerOrCompany){
-            Toast.makeText(this, "customer", Toast.LENGTH_LONG).show();
-            setTheme(R.style.CustomerTheme);
-        } else {
-            Toast.makeText(this, "company", Toast.LENGTH_LONG).show();
-            setTheme(R.style.CompanyTheme);
-        }
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        Log.d("onDestroy", "here");
+        editor.clear().apply();
+
+    }
+
+    public int getidPersonLogged(){
+        return cache.getInt(getString(R.string.person_id), 0);
+    }
+
+    public boolean getModeLogged(){
+        return cache.getBoolean(getString(R.string.person_or_company), true);
+    }
+
+    public String getToken(){
+        return cache.getString(getString(R.string.token), "");
+    }
     public void setupFragment(Fragment fragment){
 
 

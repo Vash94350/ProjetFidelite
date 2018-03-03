@@ -1,5 +1,6 @@
 package esgi.jwm.project.loyalty.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -22,12 +23,12 @@ import esgi.jwm.project.loyalty.activities.CoreActivity;
  * Created by wmorgado on 13/02/2018.
  */
 
-public class CustomerFragment extends Fragment implements IFragmentsOnClickListener {
+public class PersonFragment extends Fragment implements IFragmentsOnClickListener {
 
-    View fragment;
-    Typeface typeface;
-    SharedPreferences cache;
-    SharedPreferences.Editor editor;
+    private View fragment;
+    private Typeface typeface;
+    private SharedPreferences cache;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onResume() {
@@ -45,7 +46,7 @@ public class CustomerFragment extends Fragment implements IFragmentsOnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragment = inflater.inflate(R.layout.fragment_customer, container, false);
+        fragment = inflater.inflate(R.layout.fragment_person, container, false);
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
 
         TextView titleTextView = (TextView) fragment.findViewById(R.id.title);
@@ -77,30 +78,30 @@ public class CustomerFragment extends Fragment implements IFragmentsOnClickListe
 
     @Override
     public void onClickLogin(View v) {
-        editor.putBoolean(getString(R.string.customer_or_company), true);
-
+        editor.putBoolean(getString(R.string.person_or_company), true);
+        editor.putBoolean(getString(R.string.login_or_register), true);
         if(editor.commit()){
-            Log.i("CustomerFragment", "cache updated");
+            Intent intent = new Intent(getActivity(), CoreActivity.class);
+            startActivity(intent);
         } else {
-            Log.i("CustomerFragment", "cache NOT updated");
+            Log.i("PersonFragment", "cache NOT updated");
         }
 
-        Intent intent = new Intent(getActivity(), CoreActivity.class);
-        startActivity(intent);
+
     }
 
 
     @Override
     public void onClickRegister(View v) {
-        editor.putBoolean(getString(R.string.customer_or_company), true);
-
+        editor.putBoolean(getString(R.string.person_or_company), true);
+        editor.putBoolean(getString(R.string.login_or_register), false);
         if(editor.commit()){
-            Log.i("CustomerFragment", "cache updated");
+            Intent intent = new Intent(getActivity(), CoreActivity.class);
+            startActivity(intent);
         } else {
-            Log.i("CustomerFragment", "cache NOT updated");
+            Log.i("PersonFragment", "cache NOT updated");
         }
 
-        System.out.println(getActivity().toString());
 
     }
 

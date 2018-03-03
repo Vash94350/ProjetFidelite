@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.activities.IFragmentsOnClickListener;
@@ -80,11 +81,12 @@ public class CompanyFragment extends Fragment implements IFragmentsOnClickListen
 
     @Override
     public void onClickLogin(View v) {
-        editor.putBoolean(getString(R.string.customer_or_company), false);
+        editor.putBoolean(getString(R.string.person_or_company), false);
+        editor.putBoolean(getString(R.string.login_or_register), true);
         if(editor.commit()){
-            Log.i("CustomerFragment", "cache updated");
+            Toast.makeText(getContext(), "cache updated", Toast.LENGTH_LONG).show();
         } else {
-            Log.i("CustomerFragment", "cache NOT updated");
+            Log.i("PersonFragment", "cache NOT updated");
         }
 
         Intent intent = new Intent(getActivity(), CoreActivity.class);
@@ -92,11 +94,12 @@ public class CompanyFragment extends Fragment implements IFragmentsOnClickListen
     }
     @Override
     public void onClickRegister(View v) {
-        editor.putBoolean(getString(R.string.customer_or_company), false);
+        editor.putBoolean(getString(R.string.person_or_company), false);
+        editor.putBoolean(getString(R.string.login_or_register), false);
         if(editor.commit()){
-            Log.i("CustomerFragment", "cache updated");
+            Toast.makeText(getContext(), "cache updated", Toast.LENGTH_LONG).show();
         } else {
-            Log.i("CustomerFragment", "cache NOT updated");
+            Log.i("PersonFragment", "cache NOT updated");
         }
 
     }

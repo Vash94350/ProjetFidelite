@@ -2,8 +2,10 @@ package esgi.jwm.project.loyalty.settings;
 
 public enum Error {
 
-    DATABASE(0, "A database error has occured."),
-    IMPORTANT_DATA_MISSING(1, "Some important data are missing");
+    PARAMETERS_MISSING(400, "Some important data are missing"),
+    CHECK_FAIL(500, "An error has occure during the verification treatment");
+
+
 
 
     private final int code;

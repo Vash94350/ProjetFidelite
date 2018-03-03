@@ -21,11 +21,7 @@ public class ConnectedPersonFragment extends Fragment {
 
 
     private View fragment;
-    CoreActivity coreActivity;
-
-    public ConnectedPersonFragment() {
-        // Required empty public constructor
-    }
+    private CoreActivity coreActivity;
 
 
     @Override
@@ -36,7 +32,9 @@ public class ConnectedPersonFragment extends Fragment {
         fragment =  inflater.inflate(R.layout.fragment_connected_person, container, false);
 
         TextView textView = fragment.findViewById(R.id.textview);
-        textView.setText("Hello person id : " + coreActivity.idPersonConnected);
+        String text =   "Hello person id : " + coreActivity.getidPersonLogged() + "\n"
+                        + "tokenGenerated : " + coreActivity.getToken();
+        textView.setText(text);
 
         return fragment;
     }

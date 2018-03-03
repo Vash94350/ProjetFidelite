@@ -5,6 +5,6 @@ package esgi.jwm.project.loyalty.serverhandler;
  */
 
 public interface IServerHandlerConnection {
-    public int login(String mail, String password);
+    public void login(String mail, String password, APICallback apiCallback);
     public boolean register();
 }
