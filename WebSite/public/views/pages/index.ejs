@@ -21,13 +21,17 @@
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="javascripts/materialize.min.js"></script>
         <script>
-            var autocomplete;
+            var PSIautocomplete;
+            var CPIautocomplete;
             var options = {
                 types: ['address']
             };
+
             function activatePlacesSearch(){
-                const input = document.getElementById("PSICity");
-                autocomplete = new google.maps.places.Autocomplete(input, options);
+                const PSIinput = document.getElementById("PSIAdress");
+                PSIautocomplete = new google.maps.places.Autocomplete(PSIinput, options);
+                const CPIinput = document.getElementById("CPIAdress");
+                CPIautocomplete = new google.maps.places.Autocomplete(CPIinput, options);
             }
         </script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNQarOl9ARESfHtbwoYdZImhmt56FtQ4s&libraries=places&callback=activatePlacesSearch"></script>

@@ -28,7 +28,7 @@ $(document).ready(function() {
         $('#inscription-person').fadeOut(100);
         $('#connection').delay(200).fadeIn(100);
     });
-    
+
     $("#company-back-button").click(function() {
         $('#inscription-company').fadeOut(100);
         $('#connection').delay(200).fadeIn(100);
@@ -93,7 +93,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     $("#PSIRegister").click(function(){
         const email = $("#PSIEmailUser").val();
         const phone = $("#PSITelephone").val();
@@ -105,9 +105,25 @@ $(document).ready(function() {
         const birthDate = $("#PSIBirthDate").val();
         const city = $("#PSICity").val();
         const country = $("#PSICountry").val();
+
+        var adressDict = {
+            "street_number": null,
+            "route": null,
+            "locality": null,
+            "country": null,
+            "postal_code": null
+        };
         
-        alert(JSON.stringify(autocomplete.getPlace()));
+        $.each(PSIautocomplete.getPlace()["address_components"], function(i, item) {
+            const type = item["types"][0];
+            if(type in adressDict){
+                adressDict[type] = item["long_name"];
+            }
+        });
         
+        alert(JSON.stringify(adressDict));
+        return;
+
         $.ajax({
             type: 'POST',
             dataType: 'json',
