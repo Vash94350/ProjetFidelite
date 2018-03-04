@@ -74,7 +74,6 @@ router.post('/register', function(req, res){
     const streetNumber = req.body.streetNumber;
     const route = req.body.route;
     const city = req.body.city;
-    const state = req.body.state;
     const zipCode = req.body.zipCode;
     const country = req.body.country;
 
