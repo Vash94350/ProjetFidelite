@@ -25,9 +25,16 @@ public class ServerHandler {
         serverHandler.login(mail, password, callback);
     }
 
-    public boolean register(){
+    public boolean register(String mail, String password, String telephone,
+                            String firstname, String lastname, String sex,
+                            String birthDate, String streetNumber, String route,
+                            String zipCode, String city, String Country, APICallback callback){
 
-        return serverHandler.register();
+        return serverHandler.register(mail,  password,  telephone,
+                 firstname,  lastname,  sex,
+                 birthDate,  streetNumber,  route,
+                 zipCode,  city,  Country,
+                 callback);
     }
 
 

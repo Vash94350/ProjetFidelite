@@ -3,7 +3,6 @@ package esgi.jwm.project.loyalty.fragments;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
@@ -16,11 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -29,12 +27,12 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import org.w3c.dom.Text;
+import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import esgi.jwm.project.loyalty.R;
+import esgi.jwm.project.loyalty.serverhandler.APICallback;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerCompanyTest;
 
@@ -48,8 +46,8 @@ public class RegisterFragment extends Fragment {
     final String[] SEXE = {"Male","Female","Other"};
 
     private AutoCompleteTextView email;
-    private AutoCompleteTextView firstname;
-    private AutoCompleteTextView lastname;
+    private AutoCompleteTextView firstName;
+    private AutoCompleteTextView lastName;
 
 //    pwd : password, pwd1 : retypepassword
     private TextInputEditText pwd;
@@ -77,8 +75,8 @@ public class RegisterFragment extends Fragment {
         pwd = fragment.findViewById(R.id.password);
         pwd1 = fragment.findViewById(R.id.password1);
         sexe = (MaterialBetterSpinner) fragment.findViewById(R.id.android_material_design_spinner);
-        firstname = fragment.findViewById(R.id.firstname);
-        lastname = fragment.findViewById(R.id.lastname);
+        firstName = fragment.findViewById(R.id.firstname);
+        lastName = fragment.findViewById(R.id.lastname);
         birthDate = fragment.findViewById(R.id.birthdate);
         telephone = fragment.findViewById(R.id.telephone);
 
@@ -162,6 +160,36 @@ public class RegisterFragment extends Fragment {
         if(checkInputs()){
             serverHandler = new ServerHandler(new ServerHandlerCompanyTest(getContext(), cache));
 
+            String mail = email.getText().toString();
+            String password = pwd.getText().toString();
+            String tel = telephone.getText().toString();
+            String firstname = firstName.getText().toString();
+            String lastname = lastName.getText().toString();
+            String sexe = "M";
+            String birthdate = birthDate.getText().toString();
+            String streetNumber;
+            String route;
+            String zipCode;
+            String city;
+            String country;
+
+
+            serverHandler.register(mail, password, tel,
+                    firstname, lastname, sexe, birthdate,
+                    "45", "bd totopar", "77777",
+                    "Paris", "France", new APICallback() {
+                        @Override
+                        public void onSuccessResponse(JSONObject result) {
+                            
+                        }
+
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    })
+
         }
     }
 
@@ -173,15 +201,15 @@ public class RegisterFragment extends Fragment {
             return false;
         }
 
-        if(TextUtils.isEmpty(firstname.getText())) {
-            firstname.setError("Please enter your first name");
-            firstname.requestFocus();
+        if(TextUtils.isEmpty(firstName.getText())) {
+            firstName.setError("Please enter your first name");
+            firstName.requestFocus();
             return false;
         }
 
-        if(TextUtils.isEmpty(lastname.getText())) {
-            lastname.setError("Please enter your last name");
-            lastname.requestFocus();
+        if(TextUtils.isEmpty(lastName.getText())) {
+            lastName.setError("Please enter your last name");
+            lastName.requestFocus();
             return false;
         }
 

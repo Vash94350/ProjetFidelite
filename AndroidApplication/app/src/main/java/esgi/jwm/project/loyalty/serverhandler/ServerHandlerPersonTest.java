@@ -101,8 +101,45 @@ public class ServerHandlerPersonTest implements IServerHandlerConnection {
     }
 
     @Override
-    public boolean register() {
-        return false;
+    public boolean register(String mail, String password, String telephone, String firstname, String lastname, String sex, String birthDate, String streetNumber, String route, String zipCode, String city, String Country, APICallback callback) {
+        listParams = prepareHashMap("email", mail, "password", password);
+        JSONObject parameters = new JSONObject(listParams);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlNodeJs + "/register",parameters,
+                response -> {
+
+                    try {
+                        editor.putInt(context.getString(R.string.person_id), response.getInt(context.getString(R.string.person_id)));
+                        editor.putString(context.getString(R.string.token), response.getString(context.getString(R.string.token)));
+
+                        if(editor.commit()){
+                            Toast.makeText(context, "cache updated", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context, "cache NOT updated", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    callback.onSuccessResponse(response);
+                },
+
+                error -> {
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    editor.putInt(context.getString(R.string.person_id), 0);
+                    editor.putInt(context.getString(R.string.error_code), error.networkResponse.statusCode);
+                    editor.putString(context.getString(R.string.error_message), error.getMessage());
+
+                    if(editor.commit()){
+                        Toast.makeText(context, "cache updated", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, "cache NOT updated", Toast.LENGTH_LONG).show();
+                    }
+                    callback.onErrorResponse(error);
+
+                }
+        );
     }
+
 
 }
