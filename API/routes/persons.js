@@ -124,7 +124,6 @@ router.post('/register', function(req, res){
                 streetNumber: streetNumber,
                 route: route,
                 city: city,
-                state: state,
                 zipCode: zipCode,
                 country: country
             }).then(function(newPlace){

@@ -1,6 +1,8 @@
 $(document).ready(function() {
     // initialisation
 
+    $('.modal').modal();
+
     $('select').material_select();
 
     $('.datepicker').pickadate({
@@ -9,7 +11,7 @@ $(document).ready(function() {
         today: 'Today',
         clear: 'Clear',
         close: 'Ok',
-        format: 'yyyy-dd-mm',
+        format: 'yyyy-mm-dd',
         closeOnSelect: false // Close upon selecting a date,
     });
 
@@ -103,8 +105,6 @@ $(document).ready(function() {
         const firstname = $("#PSIFirstname").val();
         const gender = $("#PSIGender").val();
         const birthDate = $("#PSIBirthDate").val();
-        const city = $("#PSICity").val();
-        const country = $("#PSICountry").val();
 
         var adressDict = {
             "street_number": null,
@@ -113,17 +113,16 @@ $(document).ready(function() {
             "country": null,
             "postal_code": null
         };
-        
-        $.each(PSIautocomplete.getPlace()["address_components"], function(i, item) {
-            const type = item["types"][0];
-            if(type in adressDict){
-                adressDict[type] = item["long_name"];
-            }
-        });
-        
-        alert(JSON.stringify(adressDict));
-        return;
 
+        $.each(PSIautocomplete.getPlace()["address_components"], function(i, item) {
+            $.each(item["types"], function(i, itemT){
+                if(itemT in adressDict){
+                    adressDict[itemT] = item["long_name"];
+                }
+            });
+        });
+
+        $.support.cors = true;
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -134,8 +133,11 @@ $(document).ready(function() {
                 'lastname': lastname,
                 'sex': gender,
                 'birthDate': birthDate,
-                'city': city,
-                'country': country,
+                'streetNumber': adressDict["street_number"],
+                'route': adressDict["route"],
+                'zipCode': adressDict["postal_code"],
+                'city': adressDict["locality"],
+                'country': adressDict["country"],
                 'telephone': phone
             },
             url: "http://localhost:3000/persons/register",
@@ -143,7 +145,10 @@ $(document).ready(function() {
                 alert(JSON.stringify(jqXHR));
             },
             success: function (msg) {
-                alert(JSON.stringify(msg));
+                $('#inscription-person').fadeOut(100);
+                $('#connection').delay(200).fadeIn(100);
+                $('#modal-text').html("Votre inscription a bien été prise en compte, veuillez valider votre email en cliquant sur le lien qui vous a été envoyé à l'adresse : " + email + ".");
+                $('#success-modal').modal('open');
             }
         });
     });
