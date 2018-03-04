@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     var Places = sequelize.define('Places', {
-        streetNumber: { type: DataTypes.INTEGER, allowNull: true },
+        streetNumber: { type: DataTypes.STRING, allowNull: true },
         route: { type: DataTypes.STRING, allowNull: true },
         city: { type: DataTypes.STRING, allowNull: false },
         zipCode: { type: DataTypes.STRING, allowNull: true },

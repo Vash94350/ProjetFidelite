@@ -110,9 +110,6 @@ $(document).ready(function() {
             "street_number": null,
             "route": null,
             "locality": null,
-            "sublocality_level_1": null,
-            "administrative_area_level_1": null,
-            "administrative_area_level_2": null,
             "country": null,
             "postal_code": null
         };
