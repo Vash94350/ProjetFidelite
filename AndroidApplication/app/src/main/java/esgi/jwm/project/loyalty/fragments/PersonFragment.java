@@ -59,19 +59,9 @@ public class PersonFragment extends Fragment implements IFragmentsOnClickListene
             buttonLogin.setTypeface(typeface);
         }
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickLogin(v);
-            }
-        });
+        buttonLogin.setOnClickListener(v -> onClickLogin(v));
 
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickRegister(v);
-            }
-        });
+        buttonRegister.setOnClickListener(v -> onClickRegister(v));
 
         return fragment;
     }

@@ -4,6 +4,8 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by wmorgado on 23/02/2018.
  */

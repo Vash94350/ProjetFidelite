@@ -33,7 +33,8 @@ public class ConnectedPersonFragment extends Fragment {
 
         TextView textView = fragment.findViewById(R.id.textview);
         String text =   "Hello person id : " + coreActivity.getidPersonLogged() + "\n"
-                        + "tokenGenerated : " + coreActivity.getToken();
+                        + "token : " + coreActivity.getToken() + "\n"
+                        + "QRToken : " + coreActivity.getQRToken();
         textView.setText(text);
 
         return fragment;

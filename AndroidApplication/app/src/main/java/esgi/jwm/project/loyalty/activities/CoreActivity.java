@@ -70,7 +70,7 @@ public class CoreActivity extends FragmentActivity {
     }
 
     public int getidPersonLogged(){
-        return cache.getInt(getString(R.string.person_id), 0);
+        return cache.getInt(getString(R.string.personId_data_label), 0);
     }
 
     public boolean getModeLogged(){
@@ -79,6 +79,9 @@ public class CoreActivity extends FragmentActivity {
 
     public String getToken(){
         return cache.getString(getString(R.string.token), "");
+    }
+    public String getQRToken() {
+        return cache.getString(getString(R.string.QRtoken), "");
     }
     public void setupFragment(Fragment fragment){
 
@@ -89,4 +92,6 @@ public class CoreActivity extends FragmentActivity {
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
     }
+
+
 }

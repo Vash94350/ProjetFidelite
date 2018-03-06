@@ -37,12 +37,33 @@
     <string name="select_sexe">Sexe</string>
     <string name="prompt_telephone">Telephone</string>
     <string name="login_or_register">login_or_register</string>
-    <string name="url_api">http://localhost:3000/</string>
-    <string name="person_id">personId</string>
-    <string name="company_id">companyId</string>
+
+
     <string name="token">token</string>
     <string name="error_message">error_message</string>
     <string name="error_code">error_code</string>
     <string name="adress_label">Enter your adress</string>
     <string name="birthdate">Birth Date</string>
+
+
+    <!--IMPORTANT STRING DO NOT TOUCH IT -->
+    <string name="url_api">http://localhost:3000/</string>
+    <string name="personId_data_label">personId</string>
+    <string name="companyId_data_label">companyId</string>
+    <string name="email_data_label">email</string>
+    <string name="password_data_label">password</string>
+    <string name="telephone_data_label">telephone</string>
+    <string name="firstname_data_label">firstname</string>
+    <string name="lastname_data_label">lastname</string>
+    <string name="sex_data_label">sex</string>
+    <string name="birthdate_data_label">birthDate</string>
+    <string name="streetNumber_data_label">streetNumber</string>
+    <string name="route_data_label">route</string>
+    <string name="zipCode_data_label">zipCode</string>
+    <string name="city_data_label">city</string>
+    <string name="country_data_label">country</string>
+    <string name="QRtoken">QRToken</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="ok_button">Ok</string>
+
 </resources>

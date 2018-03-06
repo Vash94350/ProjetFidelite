@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,10 +11,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -24,17 +25,19 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
 
 import esgi.jwm.project.loyalty.R;
+import esgi.jwm.project.loyalty.activities.CoreActivity;
 import esgi.jwm.project.loyalty.serverhandler.APICallback;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerCompanyTest;
+import esgi.jwm.project.loyalty.serverhandler.ServerHandlerPersonTest;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -45,9 +48,9 @@ public class RegisterFragment extends Fragment {
     private final int TYPE_COUNTRY = 1005;
     final String[] SEXE = {"Male","Female","Other"};
 
-    private AutoCompleteTextView email;
-    private AutoCompleteTextView firstName;
-    private AutoCompleteTextView lastName;
+    private TextInputEditText email;
+    private TextInputEditText firstName;
+    private TextInputEditText lastName;
 
 //    pwd : password, pwd1 : retypepassword
     private TextInputEditText pwd;
@@ -57,53 +60,95 @@ public class RegisterFragment extends Fragment {
     private MaterialBetterSpinner sexe;
     private TextInputEditText telephone;
     private ServerHandler serverHandler;
-    private SharedPreferences cache;
-    private Place place;
 
+    private CoreActivity coreActivity;
+    private ProgressBar progressBar;
+    private SharedPreferences cache;
+    private String sex;
+
+
+    private Place place;
     private EditText birthDate;
     private DatePickerDialog.OnDateSetListener dateSetListener;
+    private SharedPreferences.Editor editor;
+
     @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         fragment =  inflater.inflate(R.layout.fragment_register, container, false);
 
+        coreActivity = (CoreActivity) getActivity();
+
         //        get the cache of the application
-        this.cache = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        this.cache = coreActivity.cache;
+        editor = this.cache.edit();
 
         email = fragment.findViewById(R.id.email);
         pwd = fragment.findViewById(R.id.password);
         pwd1 = fragment.findViewById(R.id.password1);
-        sexe = (MaterialBetterSpinner) fragment.findViewById(R.id.android_material_design_spinner);
+        sexe = fragment.findViewById(R.id.android_material_design_spinner);
+        progressBar = fragment.findViewById(R.id.progressBar);
+
         firstName = fragment.findViewById(R.id.firstname);
         lastName = fragment.findViewById(R.id.lastname);
         birthDate = fragment.findViewById(R.id.birthdate);
         telephone = fragment.findViewById(R.id.telephone);
 
-        birthDate.setOnClickListener(v -> {
+        sexe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sex = parent.getItemAtPosition(position).toString().substring(0,1);
+                System.out.println("SEXE :" + sex);
+            }
 
-            Calendar calendar = Calendar.getInstance();
-            int year  = calendar.get(Calendar.YEAR);
-            int month  = calendar.get(Calendar.MONTH);
-            int day  = calendar.get(Calendar.DAY_OF_MONTH);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    dateSetListener, year, month, day);
-            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.semitransparentblack)));
-            datePickerDialog.show();
+            }
+        });
 
+//        birthDate.setOnClickListener(v -> {
+//
+//            Calendar calendar = Calendar.getInstance();
+//            int year  = calendar.get(Calendar.YEAR);
+//            int month  = calendar.get(Calendar.MONTH);
+//            int day  = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+//                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+//                    dateSetListener, year, month, day);
+////            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.semitransparentblack)));
+//            datePickerDialog.show();
+//
+//        });
+
+        birthDate.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus){
+                Calendar calendar = Calendar.getInstance();
+                int year  = calendar.get(Calendar.YEAR);
+                int month  = calendar.get(Calendar.MONTH);
+                int day  = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener, year, month, day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.semitransparentblack)));
+                datePickerDialog.show();
+            }
         });
 
 
         dateSetListener = (view, year, month, dayOfMonth) -> {
             month += 1;
-            birthDate.setText(dayOfMonth + "/" + month + "/"+year);
+            birthDate.setText(year + "-" + month + "-"+dayOfMonth);
         };
 
+//        setup Sexe spinner
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, SEXE);
         sexe.setAdapter(arrayAdapter);
+        sexe.setSelection(arrayAdapter.getPosition("Male"));
 
         adress = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_adress);
 
@@ -112,11 +157,7 @@ public class RegisterFragment extends Fragment {
 
 
         buttonRegister.setOnClickListener(v -> {
-            try {
-                register(v);
-            } catch (UnirestException e) {
-                e.printStackTrace();
-            }
+            onClickRegister();
         });
 
 //        CITY
@@ -139,58 +180,78 @@ public class RegisterFragment extends Fragment {
         adress.setFilter(new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).build());
         adress.setHint(getActivity().getString(R.string.adress_label));
 
-//        autocompleteFragmentCity.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                Log.i(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
-//
-
         return fragment;
     }
 
-    private void register(View v) throws UnirestException {
+    private void onClickRegister() {
+        progressBar.setVisibility(View.VISIBLE);
         if(checkInputs()){
-            serverHandler = new ServerHandler(new ServerHandlerCompanyTest(getContext(), cache));
+            serverHandler = new ServerHandler(new ServerHandlerPersonTest(getContext()));
 
             String mail = email.getText().toString();
             String password = pwd.getText().toString();
             String tel = telephone.getText().toString();
             String firstname = firstName.getText().toString();
             String lastname = lastName.getText().toString();
-            String sexe = "M";
-            String birthdate = birthDate.getText().toString();
-            String streetNumber;
-            String route;
-            String zipCode;
-            String city;
-            String country;
 
+            String birthdate = birthDate.getText().toString();
+
+            String placeLocale = place.getAddress().toString();
+            //10 Ruelle des Chats, 77860 Quincy-Voisins, France\n" +
+
+            String streetNumber = placeLocale.substring(0, placeLocale.indexOf(' '));
+            placeLocale = placeLocale.substring(placeLocale.lastIndexOf(streetNumber) + streetNumber.length() + 1, placeLocale.length());
+
+            //Ruelle des Chats, 77860 Quincy-Voisins, France\n" +
+            String route = placeLocale.substring(0, placeLocale.indexOf(','));
+            placeLocale = placeLocale.substring(placeLocale.indexOf(route) + route.length() + 2, placeLocale.length());
+
+            //77860 Quincy-Voisins, France\n" +
+            String zipCode = placeLocale.substring(0,placeLocale.indexOf(' '));
+            placeLocale = placeLocale.substring(placeLocale.indexOf(zipCode) + zipCode.length() + 1, placeLocale.length());
+
+            //Quincy-Voisins, France\n" +
+
+            String city = placeLocale.substring(0, placeLocale.indexOf(','));
+            placeLocale = placeLocale.substring(placeLocale.indexOf(city) + city.length() + 2, placeLocale.length());
+
+            //France" +
+            String country = placeLocale;
+
+            System.out.println("streetNumber " + streetNumber + " route "+ route + " zipCode " + zipCode + " city " + city + " Country " + country);
 
             serverHandler.register(mail, password, tel,
-                    firstname, lastname, sexe, birthdate,
-                    "45", "bd totopar", "77777",
-                    "Paris", "France", new APICallback() {
+                    firstname, lastname, sex, birthdate,
+                    streetNumber, route, zipCode,
+                    city, country, new APICallback() {
                         @Override
                         public void onSuccessResponse(JSONObject result) {
-                            
+                            System.out.println(result.toString());
+                            Toast.makeText(getContext(), result.toString(),Toast.LENGTH_LONG).show();
+
+                            try {
+                                editor.putInt(getContext().getString(R.string.personId_data_label), result.getInt(getContext().getString(R.string.personId_data_label)));
+                                editor.commit();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            progressBar.setVisibility(View.GONE);
+                            coreActivity.setupFragment(new LoginFragment());
+
                         }
 
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            System.out.println(error.getMessage());
+                            Toast.makeText(getContext(), error.getMessage(),Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
 
                         }
-                    })
-
+                    });
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     private boolean checkInputs() {
@@ -234,12 +295,12 @@ public class RegisterFragment extends Fragment {
             return false;
         }
 
-        if(pwd.getText() != pwd1.getText()){
-            pwd.setError("Both password don't match");
-            return false;
+        if(pwd.getText().toString().equals(pwd1.getText().toString())){
+            return true;
         }
 
-        return true;
+        pwd.setError("Both password don't match");
+        return false;
     }
 
 

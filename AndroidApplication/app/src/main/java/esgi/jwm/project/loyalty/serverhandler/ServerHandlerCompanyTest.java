@@ -24,22 +24,19 @@ import static esgi.jwm.project.loyalty.serverhandler.ServerHandler.prepareHashMa
 
 public class ServerHandlerCompanyTest implements IServerHandlerConnection{
 
-    private final String ipServ = "10.0.2.2";
+//    private final String ipServ = "10.0.2.2";
+    private final String ipServ = "192.168.0.46";
     private final String portNodeJs = ":3000";
     private final String company = "companies";
     private final String urlNodeJs = "http://" +ipServ + portNodeJs + "/" + company;
 
     private final Context context;
     private final RequestQueue requestQueue;
-    private final SharedPreferences cache;
-    private final SharedPreferences.Editor editor;
     private HashMap<String, Object> listParams;
 
-    public ServerHandlerCompanyTest(Context context, SharedPreferences cache) {
+    public ServerHandlerCompanyTest(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
-        this.cache = cache;
-        this.editor = this.cache.edit();
     }
 
     @Override
@@ -50,42 +47,30 @@ public class ServerHandlerCompanyTest implements IServerHandlerConnection{
         JSONObject parameters = new JSONObject(listParams);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlNodeJs + "/login",parameters,
-                response -> {
-
-                    try {
-                        editor.putInt(context.getString(R.string.company_id), response.getInt(context.getString(R.string.company_id)));
-                        editor.putString(context.getString(R.string.token), response.getString(context.getString(R.string.token)));
-
-                        if(editor.commit()){
-                            apiCallback.onSuccessResponse(response);
-                        } else {
-                            Toast.makeText(context, "cache NOT updated", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                },
-
-                error -> {
-                    editor.putInt(context.getString(R.string.company_id), 0);
-                    editor.putInt(context.getString(R.string.error_code), error.networkResponse.statusCode);
-                    editor.putString(context.getString(R.string.error_message), error.getMessage());
-
-                    if(editor.commit()){
-                        apiCallback.onErrorResponse(error);
-                    } else {
-                        Toast.makeText(context, "cache NOT updated", Toast.LENGTH_LONG).show();
-                    }
-
-                }
+                apiCallback::onSuccessResponse,
+                apiCallback::onErrorResponse
         );
 
         requestQueue.add(jsonObjectRequest);
     }
 
     @Override
-    public boolean register() {
-        return false;
+    public void register(String mail, String password, String telephone, String firstname, String lastname, String sex, String birthDate, String streetNumber, String route, String zipCode, String city, String Country, APICallback callback) {
+
+//        open browser
     }
+
+    @Override
+    public void resendMail(String mail, APICallback callback) {
+        listParams = prepareHashMap("userEmail", mail, "userType", company);
+        JSONObject parameters = new JSONObject(listParams);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, ipServ + portNodeJs + "/email/resend",parameters,
+                callback::onSuccessResponse,
+                callback::onErrorResponse
+        );
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
 }

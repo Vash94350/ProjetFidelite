@@ -25,18 +25,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <AutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textEmailAddress|textNoSuggestions"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:nextFocusDown="@id/firstname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -44,14 +51,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <AutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/first_name"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:nextFocusDown="@id/lastname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -59,14 +67,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <AutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/last_name"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:nextFocusDown="@id/birthdate"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -78,28 +87,31 @@
 
                 <EditText
                     android:id="@+id/birthdate"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/birthdate"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:clickable="false"/>
 
                 <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                     android:id="@+id/android_material_design_spinner"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:hint="@string/select_sexe"
                     android:textColorHint="#05ab9a"
-                    app:met_floatingLabel="normal" />
+                    app:met_floatingLabel="normal"
+                    android:nextFocusDown="@id/place_autocomplete_fragment_adress"/>
             </LinearLayout>
 
             <fragment
                 android:id="@+id/place_autocomplete_fragment_adress"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:nextFocusDown="@id/telephone"/>
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/telephone"
@@ -107,7 +119,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/prompt_telephone"
-                android:inputType="phone" />
+                android:inputType="phone|textNoSuggestions"
+                android:nextFocusDown="@id/password"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -119,9 +132,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/type_password"
-                    android:inputType="textPassword"
+                    android:inputType="textPassword|textNoSuggestions"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLength="8"
+                    android:singleLine="true"
+                    android:nextFocusDown="@id/password1"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -134,9 +149,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/prompt_password_retype"
-                    android:inputType="textPassword"
+                    android:inputType="textPassword|textNoSuggestions"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLength="8"
+                    android:singleLine="true"
+                    android:nextFocusDown="@id/button_register"/>
 
             </android.support.design.widget.TextInputLayout>
 

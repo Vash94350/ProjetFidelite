@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import com.android.volley.VolleyError;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
  * Created by wmorgado on 14/02/2018.
@@ -15,7 +14,7 @@ public class ServerHandler {
     public IServerHandlerConnection serverHandler;
 
 //    here polymorphism allows you to put in parameter any class implementing IServerHandlerPerson
-    public ServerHandler(IServerHandlerConnection serverHandler) throws UnirestException {
+    public ServerHandler(IServerHandlerConnection serverHandler) {
         this.serverHandler = serverHandler;
     }
 
@@ -25,16 +24,19 @@ public class ServerHandler {
         serverHandler.login(mail, password, callback);
     }
 
-    public boolean register(String mail, String password, String telephone,
+    public void register(String mail, String password, String telephone,
                             String firstname, String lastname, String sex,
                             String birthDate, String streetNumber, String route,
                             String zipCode, String city, String Country, APICallback callback){
-
-        return serverHandler.register(mail,  password,  telephone,
+        serverHandler.register(mail,  password,  telephone,
                  firstname,  lastname,  sex,
                  birthDate,  streetNumber,  route,
                  zipCode,  city,  Country,
                  callback);
+    }
+
+    public void resendMail(String mail, APICallback callback){
+        serverHandler.resendMail(mail, callback);
     }
 
 
