@@ -152,4 +152,15 @@ $(document).ready(function() {
             }
         });
     });
+    
+    $("#PSIReset").click(function(){
+        $("#PSIEmailUser").val("");
+        $("#PSITelephone").val("");
+        $("#PSIPasswordUser").val("");
+        $("#PSIConfPasswordUser").val("");
+        $("#PSILastname").val("");
+        $("#PSIFirstname").val("");
+        $("#PSIGender").val("");
+        $("#PSIBirthDate").val("");
+    });
 });

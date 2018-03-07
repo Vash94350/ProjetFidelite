@@ -76,8 +76,10 @@ router.post('/register', function(req, res){
     const city = req.body.city;
     const zipCode = req.body.zipCode;
     const country = req.body.country;
+    
+    const callBack = req.body.callBack;
 
-    if(email == null || password == null || telephone == null || firstname == null || lastname == null || sex == null || birthDate == null || city == null || country == null){
+    if(email == null || password == null || telephone == null || firstname == null || lastname == null || sex == null || birthDate == null || city == null || country == null || callBack == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
 
@@ -150,7 +152,7 @@ router.post('/register', function(req, res){
             });
         },
         function(newPerson, secretToken, done){
-            mailerUtils.sendValidationEmail(newPerson.email, newPerson.id, 'persons', secretToken);
+            mailerUtils.sendValidationEmail(newPerson.email, newPerson.id, 'persons', secretToken, callBack);
             done(newPerson);
         }
     ], function(newPerson){
