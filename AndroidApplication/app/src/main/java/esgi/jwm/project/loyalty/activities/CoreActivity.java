@@ -32,7 +32,8 @@ public class CoreActivity extends FragmentActivity {
         editor = cache.edit();
 
 
-        loginOrRegister = cache.getBoolean(getString(R.string.login_or_register), true);
+        loginOrRegister = getMenuFrom();
+
         if(cache.getBoolean(getString(R.string.person_or_company), false)){
             Toast.makeText(this, "customer", Toast.LENGTH_LONG).show();
             setTheme(R.style.CustomerTheme);
@@ -65,7 +66,7 @@ public class CoreActivity extends FragmentActivity {
 
         super.onDestroy();
         Log.d("onDestroy", "here");
-        editor.clear().apply();
+//        editor.clear().apply();
 
     }
 
@@ -76,7 +77,9 @@ public class CoreActivity extends FragmentActivity {
     public boolean getModeLogged(){
         return cache.getBoolean(getString(R.string.person_or_company), true);
     }
-
+    public boolean getMenuFrom(){
+        return cache.getBoolean(getString(R.string.login_or_register), true);
+    }
     public String getToken(){
         return cache.getString(getString(R.string.token), "");
     }

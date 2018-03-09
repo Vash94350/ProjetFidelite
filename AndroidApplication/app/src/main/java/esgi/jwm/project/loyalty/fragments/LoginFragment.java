@@ -1,12 +1,10 @@
 package esgi.jwm.project.loyalty.fragments;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -32,6 +30,8 @@ import esgi.jwm.project.loyalty.serverhandler.APICallback;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerCompanyTest;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerPersonTest;
+import esgi.jwm.project.loyalty.viewtools.DialogBoxBuilder;
+import esgi.jwm.project.loyalty.viewtools.Keyboard;
 
 
 public class LoginFragment extends Fragment {
@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private ProgressBar progressBar;
     private CoreActivity coreActivity;
-    private FloatingActionButton resendMailButton;
+    private FloatingActionButton resendPasswordButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +63,7 @@ public class LoginFragment extends Fragment {
 
         Button buttonLogin = fragment.findViewById(R.id.button_login);
         progressBar = fragment.findViewById(R.id.progressBar);
-        resendMailButton = fragment.findViewById(R.id.floatingActionButton);
+        resendPasswordButton = fragment.findViewById(R.id.floatingActionButton);
 
         email = fragment.findViewById(R.id.email);
         pwd = fragment.findViewById(R.id.password);
@@ -86,14 +86,17 @@ public class LoginFragment extends Fragment {
             });
         }
 
-        resendMailButton.setOnClickListener(v -> {
-            onClickResendMail();
+        resendPasswordButton.setOnClickListener(v -> {
+            onClickResendPasswordButton();
         });
 
         return fragment;
     }
 
     public void onClickLogin(View v) throws InterruptedException {
+
+        Keyboard.hide(getActivity(), v);
+
 
         progressBar.setVisibility(View.VISIBLE);
         String mail = String.valueOf(email.getText());
@@ -151,8 +154,6 @@ public class LoginFragment extends Fragment {
                     progressBar.setVisibility(View.INVISIBLE);
 
                 }
-
-
             }
 
             @Override
@@ -165,98 +166,102 @@ public class LoginFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                if (error.networkResponse.statusCode == 403) {
+//                TODO Implement a Error enumeration with the code dans the message
+                String message_error = "";
 
-//                    create a Yes No dialog
-                    View v = getLayoutInflater().inflate(R.layout.yes_no_dialog, null);
-                    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                if(error.networkResponse.statusCode == 500)
+                    message_error = getString(R.string.dialog_message_error_unable_to_verify_account);
 
-                    TextView dialogTitle = v.findViewById(R.id.titleDialog);
-                    dialogTitle.setText("Oops !");
+                if(error.networkResponse.statusCode == 404)
+                    message_error = getString(R.string.dialog_message_error_account_do_not_exist);
 
-                    TextView dialogMessage = v.findViewById(R.id.dialogMessage);
-                    dialogMessage.setText("Your email seem not te be verified ... Send verification ?");
-                    Button buttonYes = v.findViewById(R.id.buttonYes);
-                    Button buttonNo = v.findViewById(R.id.buttonNo);
+                if(error.networkResponse.statusCode == 403)
+                    message_error = getString(R.string.dialog_message_error_password_invalid_for_this_account);
 
-                    buttonYes.setOnClickListener(v1 -> serverHandler.resendMail(mail, new APICallback() {
-                        @Override
-                        public void onSuccessResponse(JSONObject result) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Check your Mail", Toast.LENGTH_SHORT).show();
-                            alertDialog.dismiss();
+                if(error.networkResponse.statusCode == 402)
+                    message_error = getString(R.string.dialog_message_error_account_not_verified);
 
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
 
-                        @Override
-                        public void onErrorResponse(VolleyError error1) {
-                            try {
-                                String errorString1 = "ERROR " + error1.networkResponse.statusCode + " : " + new String(error1.networkResponse.data, "UTF-8");
-                                Toast.makeText(getActivity().getApplicationContext(), errorString1, Toast.LENGTH_SHORT).show();
-                                alertDialog.dismiss();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }));
-
-                    buttonNo.setOnClickListener(v12 -> {
-                                alertDialog.dismiss();
+                AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_error), message_error,
+                        getString(R.string.cancel_button), getString(R.string.ok_button), getLayoutInflater(),
+                        DialogBoxBuilder.NO_YES_DIALOG, new IBasicDialogCallBack() {
+                            @Override
+                            public void onClickButton1(View view, AlertDialog dialogBox) {
                                 progressBar.setVisibility(View.INVISIBLE);
-                            });
+                                dialogBox.dismiss();
+                            }
 
-                    alertDialog.setView(v);
-                    alertDialog.show();
+                            @Override
+                            public void onClickButton2(View view, String res, AlertDialog dialogBox) {
+//                                here we don't care about res cause it will always be empty with DialogBuilder.NO_YES_DIALOG
+                                if(error.networkResponse.statusCode == 402){
+                                    serverHandler.resendMail(mail, new APICallback() {
+                                        @Override
+                                        public void onSuccessResponse(JSONObject result) {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            Toast.makeText(getActivity().getApplicationContext(), "Check your Mail", Toast.LENGTH_SHORT).show();
+                                            dialogBox.dismiss();
+                                        }
 
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            try {
+                                                String errorString = "ERROR " + error.networkResponse.statusCode + " : " + new String(error.networkResponse.data, "UTF-8");
+                                                Toast.makeText(getActivity().getApplicationContext(), errorString , Toast.LENGTH_SHORT).show();
+                                            } catch (UnsupportedEncodingException e) {
+                                                e.printStackTrace();
+                                            }
 
-                }
+                                        }
+                                    });
+                                } else {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    dialogBox.dismiss();
+                                }
+                            }
+                        });
+                alertDialog.show();
+
             }
         });
     }
 
-    public void onClickResendMail(){
+    public void onClickResendPasswordButton(){
 
-        View v = getLayoutInflater().inflate(R.layout.fragment_basic_dialog,null);
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-//        v.findViewById(R.id.button)
-        TextView dialogTitle = v.findViewById(R.id.titleDialog);
-        dialogTitle.setText("Mail verification");
-
-        TextView dialogMessage = v.findViewById(R.id.dialogMessage);
-        dialogMessage.setText("Please enter your mail below");
-
-        TextInputEditText email = v.findViewById(R.id.email);
-
-        Button buttonOk = v.findViewById(R.id.buttonOk);
-        buttonOk.setOnClickListener(v1 -> {
-            if(email.getText().length() == 0){
-                Toast.makeText(getActivity().getApplicationContext(), "Mail is empty", Toast.LENGTH_SHORT).show();
-            } else {
-                serverHandler.resendMail(String.valueOf(email.getText()), new APICallback() {
+        AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_reset_password),
+                getString(R.string.dialog_message_reset_password), getString(R.string.cancel_button),
+                getString(R.string.ok_button), getLayoutInflater(), DialogBoxBuilder.BASIC_DIALOG, new IBasicDialogCallBack() {
                     @Override
-                    public void onSuccessResponse(JSONObject result) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Check your Mail", Toast.LENGTH_SHORT).show();
-                        alertDialog.dismiss();
+                    public void onClickButton1(View view, AlertDialog dialogBox) {
+                        dialogBox.dismiss();
                     }
 
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
-                            String errorString = "ERROR " + error.networkResponse.statusCode + " : " + new String(error.networkResponse.data, "UTF-8");
-                            Toast.makeText(getActivity().getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                    public void onClickButton2(View view, String res, AlertDialog dialogBox) {
+                        if(TextUtils.isEmpty(res)) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Mail is empty", Toast.LENGTH_SHORT).show();
+                        } else {
+                            serverHandler.resetPassword(res, new APICallback() {
+                                @Override
+                                public void onSuccessResponse(JSONObject result) {
+                                    Toast.makeText(getActivity().getApplicationContext(), "Check your Mail", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    try {
+                                        String errorString = "ERROR " + error.networkResponse.statusCode + " : " + new String(error.networkResponse.data, "UTF-8");
+                                        Toast.makeText(getActivity().getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            dialogBox.dismiss();
                         }
                     }
                 });
-            }
-        });
 
-        Button buttonCancel = v.findViewById(R.id.buttonCancel);
-        buttonCancel.setOnClickListener(v12 -> alertDialog.dismiss());
-
-        alertDialog.setView(v);
-        alertDialog.show();  //<-- See This!
-
+        alertDialog.show();
     }
 }

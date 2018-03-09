@@ -38,6 +38,7 @@ import esgi.jwm.project.loyalty.serverhandler.APICallback;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerCompanyTest;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerPersonTest;
+import esgi.jwm.project.loyalty.viewtools.Keyboard;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -157,7 +158,7 @@ public class RegisterFragment extends Fragment {
 
 
         buttonRegister.setOnClickListener(v -> {
-            onClickRegister();
+            onClickRegister(v);
         });
 
 //        CITY
@@ -183,7 +184,9 @@ public class RegisterFragment extends Fragment {
         return fragment;
     }
 
-    private void onClickRegister() {
+    private void onClickRegister(View v) {
+        Keyboard.hide(getActivity(), v);
+
         progressBar.setVisibility(View.VISIBLE);
         if(checkInputs()){
             serverHandler = new ServerHandler(new ServerHandlerPersonTest(getContext()));

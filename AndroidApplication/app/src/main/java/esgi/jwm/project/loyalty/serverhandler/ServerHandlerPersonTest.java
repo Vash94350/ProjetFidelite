@@ -99,4 +99,9 @@ public class ServerHandlerPersonTest implements IServerHandlerConnection {
 
     }
 
+    @Override
+    public void resetPassword(String mail, APICallback apiCallback) {
+        apiCallback.onSuccessResponse(null);
+    }
+
 }

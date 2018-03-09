@@ -76,4 +76,7 @@ public class ServerHandler {
         }
     }
 
+    public void resetPassword(String mail, APICallback apiCallback) {
+        serverHandler.resetPassword(mail, apiCallback);
+    }
 }

@@ -63,7 +63,15 @@
     <string name="city_data_label">city</string>
     <string name="country_data_label">country</string>
     <string name="QRtoken">QRToken</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="ok_button">Ok</string>
+    <string name="cancel_button">CANCEL</string>
+    <string name="ok_button">OK</string>
+    <string name="dialog_title_reset_password">Forgotten password ?</string>
+    <string name="dialog_message_reset_password">Don\'t worry ! You can reset your password, just enter your email below</string>
+
+    <string name="dialog_title_error">Oops !</string>
+    <string name="dialog_message_error_account_not_verified">Your email seem not te be verified ... Send verification ?</string>
+    <string name="dialog_message_error_account_do_not_exist">This account do not exist :( ...</string>
+    <string name="dialog_message_error_password_invalid_for_this_account">The password is incorrect !</string>
+    <string name="dialog_message_error_unable_to_verify_account">Unable to verify the account</string>
 
 </resources>

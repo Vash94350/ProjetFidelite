@@ -91,7 +91,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
-            android:src="?android:attr/actionModeFindDrawable"
+            android:src="@android:drawable/ic_menu_help"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_login_form"
             app:rippleColor="@android:color/white" />

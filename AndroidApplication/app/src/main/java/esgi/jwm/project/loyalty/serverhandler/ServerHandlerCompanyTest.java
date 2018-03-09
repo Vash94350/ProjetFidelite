@@ -73,4 +73,9 @@ public class ServerHandlerCompanyTest implements IServerHandlerConnection{
         requestQueue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void resetPassword(String mail, APICallback apiCallback) {
+
+    }
+
 }
