@@ -12,7 +12,7 @@ var email = require('./routes/email');
 var models = require("./models");
 
 var companiesTypesArray = [ 'restauration', 'soin', 'loisirs', 'culture' ];
-models.sequelize.sync({ force: false }).then(() => {
+models.sequelize.sync({ force: true }).then(() => {
     companiesTypesArray.forEach(function(entry){
        models.CompaniesTypes.findOrCreate({
            where: {

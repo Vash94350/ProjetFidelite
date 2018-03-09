@@ -10,7 +10,7 @@ const transport = nodemailer.createTransport({
 });
 
 module.exports={
-    sendValidationEmail: function(userMail, userId, userType, secretToken){
+    sendValidationEmail: function(userMail, userId, userType, secretToken, callBack){
         var mail = {
             from: "fidelity.project.no.reply@gmail.com",
             to: userMail,
@@ -21,6 +21,7 @@ module.exports={
             + "<input type='hidden' id='userType' name='userType' value='" + userType + "'/>"
             + "<input type='hidden' id='userId' name='userId' value='" + userId + "'/>"
             + "<input type='hidden' id='secretToken' name='secretToken' value='" + secretToken + "'/>"
+            + "<input type='hidden' id='callBack' name='callBack' value='" + callBack + "'/>"
             + "<button action='submit'>valider votre mail</button>"
             + "</form>"
         };

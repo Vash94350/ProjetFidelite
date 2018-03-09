@@ -75,8 +75,10 @@ router.post('/register', function(req, res){
     const country = req.body.country;
 
     const companyType = req.body.companyType;
+    
+    const callBack = req.body.callBack;
 
-    if(email == null || password == null || telephone == null || companyName == null || description == null || siret == null || creationDate == null || city == null || country == null || companyType == null){
+    if(email == null || password == null || telephone == null || companyName == null || description == null || siret == null || creationDate == null || city == null || country == null || companyType == null || callBack == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
 
@@ -151,7 +153,7 @@ router.post('/register', function(req, res){
         },
         function(newCompany, secretToken, done){
             console.log(secretToken);
-            mailerUtils.sendValidationEmail(newCompany.email, newCompany.id, 'companies', secretToken);
+            mailerUtils.sendValidationEmail(newCompany.email, newCompany.id, 'companies', secretToken, callBack);
             done(newCompany);
         }
     ], function(newCompany){

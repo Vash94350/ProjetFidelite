@@ -11,8 +11,9 @@ const USER_REGEX = /^persons$|^companies$/;
 router.post('/resend', function(req, res){
     const userEmail = req.body.userEmail;
     const userType = req.body.userType;
+    const callBack = req.body.callBack;
     
-    if(userEmail == null || userType == null){
+    if(userEmail == null || userType == null || callBack == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
     
@@ -61,8 +62,7 @@ router.post('/resend', function(req, res){
             });
         },
         function(userFound, secretToken, done){
-            mailerUtils.sendValidationEmail(userFound.email, userFound.id, userType, secretToken);
-            console.log(userFound.email + userFound.id + userType + secretToken);
+            mailerUtils.sendValidationEmail(userFound.email, userFound.id, userType, secretToken, callBack);
             done(userFound);
         }
     ], function(userFound){
@@ -77,8 +77,9 @@ router.post('/verify', function(req, res){
     const userId = req.body.x_userId;
     const userType = req.body.x_userType;
     const secretToken = req.body.x_secretToken;
+    const callBack = req.body.x_callBack;
     
-    if(userId == null || userType == null || secretToken == null){
+    if(userId == null || userType == null || secretToken == null || callBack == null){
         return res.status(400).json({'error': 'missing parameter'});
     }
     
@@ -134,9 +135,7 @@ router.post('/verify', function(req, res){
             });
         }
     ], function(userFound){
-        return res.status(201).json({
-            'success': 'email user of id ' + userFound.id + ' has been verified'
-        });
+        return res.redirect(callBack + "?action=verify&email=" + userFound.email);
     });
     
 });

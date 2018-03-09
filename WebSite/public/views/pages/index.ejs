@@ -13,15 +13,17 @@
 
     <body class="cyan lighten-4">
 
+
         <% include ../partial/connection-form %>
         <% include ../partial/person-inscription-form %>
         <% include ../partial/company-inscription-form %>
         <% include ../partial/modal-inscription-success %>
+        <% include ../partial/modal-email-validation %>
 
         <!--Import javascripts-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="javascripts/materialize.min.js"></script>
-        <script>
+        <script>            
             var PSIautocomplete;
             var CPIautocomplete;
             var options = {
@@ -37,5 +39,12 @@
         </script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNQarOl9ARESfHtbwoYdZImhmt56FtQ4s&libraries=places&callback=activatePlacesSearch"></script>
         <script type="text/javascript" src="javascripts/connection-page-actions.js"></script>
+        <%if (action == 'verify') { %>
+        <script>
+            $(document).ready(function() {
+                $('#email-validation-modal').modal('open');
+            });
+        </script>
+        <% } %>
     </body>
 </html>
