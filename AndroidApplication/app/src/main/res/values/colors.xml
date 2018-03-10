@@ -16,6 +16,8 @@
     <color name="customerColor">#689ec4</color>
     <color name="background_material_light">#f10c0c</color>
     <color name="primary_dark_material_light">#7b3434</color>
+    <color name="spinner_hint_text_color">#ffffcc</color>
+
 
     <declare-styleable name="MaterialSpinner">
         <attr name="ms_baseColor" format="color"/>

@@ -1,6 +1,7 @@
 package esgi.jwm.project.loyalty.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -8,12 +9,12 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -25,7 +26,6 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,14 +36,14 @@ import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.activities.CoreActivity;
 import esgi.jwm.project.loyalty.serverhandler.APICallback;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
-import esgi.jwm.project.loyalty.serverhandler.ServerHandlerCompanyTest;
 import esgi.jwm.project.loyalty.serverhandler.ServerHandlerPersonTest;
+import esgi.jwm.project.loyalty.viewtools.DialogBoxBuilder;
 import esgi.jwm.project.loyalty.viewtools.Keyboard;
+import fr.ganfra.materialspinner.MaterialSpinner;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class RegisterFragment extends Fragment {
+
     private View fragment;
 
     private final int TYPE_COUNTRY = 1005;
@@ -58,20 +58,21 @@ public class RegisterFragment extends Fragment {
     private TextInputEditText pwd1;
 
     private PlaceAutocompleteFragment adress;
-    private MaterialBetterSpinner sexe;
     private TextInputEditText telephone;
     private ServerHandler serverHandler;
 
     private CoreActivity coreActivity;
     private ProgressBar progressBar;
     private SharedPreferences cache;
-    private String sex;
+    private MaterialSpinner sexeList;
+    private String sex = "";
 
 
     private Place place;
     private EditText birthDate;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private SharedPreferences.Editor editor;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -88,41 +89,13 @@ public class RegisterFragment extends Fragment {
         email = fragment.findViewById(R.id.email);
         pwd = fragment.findViewById(R.id.password);
         pwd1 = fragment.findViewById(R.id.password1);
-        sexe = fragment.findViewById(R.id.android_material_design_spinner);
+
         progressBar = fragment.findViewById(R.id.progressBar);
 
         firstName = fragment.findViewById(R.id.firstname);
         lastName = fragment.findViewById(R.id.lastname);
         birthDate = fragment.findViewById(R.id.birthdate);
         telephone = fragment.findViewById(R.id.telephone);
-
-        sexe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sex = parent.getItemAtPosition(position).toString().substring(0,1);
-                System.out.println("SEXE :" + sex);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-//        birthDate.setOnClickListener(v -> {
-//
-//            Calendar calendar = Calendar.getInstance();
-//            int year  = calendar.get(Calendar.YEAR);
-//            int month  = calendar.get(Calendar.MONTH);
-//            int day  = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-//                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-//                    dateSetListener, year, month, day);
-////            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.semitransparentblack)));
-//            datePickerDialog.show();
-//
-//        });
 
         birthDate.setOnFocusChangeListener((v, hasFocus) -> {
             if(hasFocus){
@@ -146,23 +119,23 @@ public class RegisterFragment extends Fragment {
         };
 
 //        setup Sexe spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line, SEXE);
-        sexe.setAdapter(arrayAdapter);
-        sexe.setSelection(arrayAdapter.getPosition("Male"));
 
-        adress = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_adress);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item, SEXE);
+        sexeList = fragment.findViewById(R.id.sexe);
+        sexeList.setAdapter(arrayAdapter);
+        sexeList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sex = parent.getItemAtPosition(position).toString().substring(0,1);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-        Button buttonRegister = fragment.findViewById(R.id.button_register);
-
-
-        buttonRegister.setOnClickListener(v -> {
-            onClickRegister(v);
+            }
         });
 
-//        CITY
-
+        adress = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_adress);
         adress.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place p) {
@@ -178,8 +151,14 @@ public class RegisterFragment extends Fragment {
 //                Log.i(TAG, "An error occurred: " + status);
             }
         });
+
         adress.setFilter(new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).build());
         adress.setHint(getActivity().getString(R.string.adress_label));
+
+        Button buttonRegister = fragment.findViewById(R.id.button_register);
+        buttonRegister.setOnClickListener(v -> {
+            onClickRegister(v);
+        });
 
         return fragment;
     }
@@ -188,7 +167,8 @@ public class RegisterFragment extends Fragment {
         Keyboard.hide(getActivity(), v);
 
         progressBar.setVisibility(View.VISIBLE);
-        if(checkInputs()){
+        String res = checkInputs();
+        if(TextUtils.isEmpty(res)){
             serverHandler = new ServerHandler(new ServerHandlerPersonTest(getContext()));
 
             String mail = email.getText().toString();
@@ -200,6 +180,8 @@ public class RegisterFragment extends Fragment {
             String birthdate = birthDate.getText().toString();
 
             String placeLocale = place.getAddress().toString();
+
+
             //10 Ruelle des Chats, 77860 Quincy-Voisins, France\n" +
 
             String streetNumber = placeLocale.substring(0, placeLocale.indexOf(' '));
@@ -221,16 +203,29 @@ public class RegisterFragment extends Fragment {
             //France" +
             String country = placeLocale;
 
-            System.out.println("streetNumber " + streetNumber + " route "+ route + " zipCode " + zipCode + " city " + city + " Country " + country);
-
             serverHandler.register(mail, password, tel,
                     firstname, lastname, sex, birthdate,
                     streetNumber, route, zipCode,
-                    city, country, new APICallback() {
+                    city, country, ServerHandler.webSiteURL, new APICallback() {
                         @Override
                         public void onSuccessResponse(JSONObject result) {
-                            System.out.println(result.toString());
-                            Toast.makeText(getContext(), result.toString(),Toast.LENGTH_LONG).show();
+                            AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_succes),
+                                    getString(R.string.dialog_message_succes_account_created), getString(R.string.ok_button), "",
+                                    getLayoutInflater(), DialogBoxBuilder.DIALOG_WITH_NO_INPUT_TWO_BUTTONS, new IBasicDialogCallBack() {
+                                        @Override
+                                        public void onClickButton1(View view, AlertDialog dialogBox) {
+                                            dialogBox.dismiss();
+                                        }
+
+                                        @Override
+                                        public void onClickButton2(View view, String res, AlertDialog dialogBox) {
+                                            dialogBox.dismiss();
+                                        }
+                                    });
+                            if(alertDialog != null)
+                                alertDialog.show();
+                            else
+                                Log.d("AlertDialog Register", "alertDialog :> NULL");
 
                             try {
                                 editor.putInt(getContext().getString(R.string.personId_data_label), result.getInt(getContext().getString(R.string.personId_data_label)));
@@ -241,69 +236,95 @@ public class RegisterFragment extends Fragment {
 
                             progressBar.setVisibility(View.GONE);
                             coreActivity.setupFragment(new LoginFragment());
-
                         }
-
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             System.out.println(error.getMessage());
-                            Toast.makeText(getContext(), error.getMessage(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), error.networkResponse.statusCode + " " + error.getMessage(),Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
 
                         }
                     });
+        } else {
+
+            AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_error),
+                    res, getString(R.string.ok_button), "", getLayoutInflater(), DialogBoxBuilder.DIALOG_WITH_NO_INPUT_TWO_BUTTONS, new IBasicDialogCallBack() {
+                        @Override
+                        public void onClickButton1(View view, AlertDialog dialogBox) {
+                            dialogBox.dismiss();
+                        }
+
+                        @Override
+                        public void onClickButton2(View view, String res, AlertDialog dialogBox) {
+                            dialogBox.dismiss();
+                        }
+                    });
+
+            if(alertDialog != null)
+                alertDialog.show();
+            else
+                Log.d("AlertDialog Register", "alertDialog :> NULL");
         }
         progressBar.setVisibility(View.GONE);
     }
 
-    private boolean checkInputs() {
+    private String checkInputs() {
 
         if(TextUtils.isEmpty(email.getText())) {
-            email.setError("Please enter your mail");
             email.requestFocus();
-            return false;
+            return "Please enter your mail";
         }
 
         if(TextUtils.isEmpty(firstName.getText())) {
-            firstName.setError("Please enter your first name");
             firstName.requestFocus();
-            return false;
+            return "Please enter your first name";
         }
 
         if(TextUtils.isEmpty(lastName.getText())) {
-            lastName.setError("Please enter your last name");
             lastName.requestFocus();
-            return false;
+            return "Please enter your last name";
         }
 
         if(TextUtils.isEmpty(birthDate.getText())) {
-            birthDate.setError("Please enter your birthdate");
-            birthDate.requestFocus();
-            return false;
+            return "Please enter your birthdate";
         }
         if(place == null){
-            Toast.makeText(getActivity(), "Please enter an valid adress", Toast.LENGTH_LONG).show();
+            return "Please enter an valid adress";
+        } else {
+            if(!checkAdressInput()){
+                return "Street number is missing";
+            }
+        }
+
+        if(TextUtils.isEmpty(sex)){
+            sexeList.requestFocus();
+            return "Please select a sexe";
         }
 
         if(TextUtils.isEmpty(telephone.getText())) {
-            pwd.setError("Please enter your telephone");
-            pwd.requestFocus();
-            return false;
+            telephone.requestFocus();
+            return "Please enter your telephone";
         }
 
         if(TextUtils.isEmpty(pwd.getText())) {
-            pwd.setError("Please enter your password");
             pwd.requestFocus();
-            return false;
+            return "Please enter your password";
         }
 
         if(pwd.getText().toString().equals(pwd1.getText().toString())){
-            return true;
+            return "";
+        } else {
+            pwd.requestFocus();
+            return "Both password don't match";
         }
-
-        pwd.setError("Both password don't match");
-        return false;
+    }
+    private boolean checkAdressInput() {
+        String adress = place.getAddress().toString();
+        if (adress.matches(".*\\d+.*"))
+            return true;
+        else
+            return false;
     }
 
 

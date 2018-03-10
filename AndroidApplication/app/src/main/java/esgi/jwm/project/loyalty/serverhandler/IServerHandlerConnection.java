@@ -9,8 +9,8 @@ public interface IServerHandlerConnection {
     void register(String mail, String password, String telephone,
                          String firstname, String lastname, String sex,
                          String birthDate, String streetNumber, String route,
-                         String zipCode, String city, String Country,
-                         APICallback callback);
+                         String zipCode, String city, String Country, String webSiteCompleteURL,
+                         APICallback apiCallback);
 
     void resendMail(String mail, APICallback apiCallback);
 

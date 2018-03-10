@@ -13,6 +13,9 @@ import com.android.volley.VolleyError;
 public class ServerHandler {
     public IServerHandlerConnection serverHandler;
 
+    public final static String webSiteURL = "http://192.168.0.46:5024/";
+    public final static String webServiceURL = "http://192.168.0.46:3000/";
+
 //    here polymorphism allows you to put in parameter any class implementing IServerHandlerPerson
     public ServerHandler(IServerHandlerConnection serverHandler) {
         this.serverHandler = serverHandler;
@@ -27,12 +30,13 @@ public class ServerHandler {
     public void register(String mail, String password, String telephone,
                             String firstname, String lastname, String sex,
                             String birthDate, String streetNumber, String route,
-                            String zipCode, String city, String Country, APICallback callback){
+                            String zipCode, String city, String Country, String webSiteCompleteURL, APICallback callback){
+
         serverHandler.register(mail,  password,  telephone,
                  firstname,  lastname,  sex,
                  birthDate,  streetNumber,  route,
                  zipCode,  city,  Country,
-                 callback);
+                 webSiteCompleteURL, callback);
     }
 
     public void resendMail(String mail, APICallback callback){

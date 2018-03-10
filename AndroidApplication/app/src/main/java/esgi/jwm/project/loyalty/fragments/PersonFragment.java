@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.activities.IFragmentsOnClickListener;
@@ -74,7 +75,7 @@ public class PersonFragment extends Fragment implements IFragmentsOnClickListene
             Intent intent = new Intent(getActivity(), CoreActivity.class);
             startActivity(intent);
         } else {
-            Log.i("PersonFragment", "cache NOT updated");
+            Toast.makeText(getContext(), "can't update cache", Toast.LENGTH_LONG).show();
         }
 
 
@@ -89,7 +90,7 @@ public class PersonFragment extends Fragment implements IFragmentsOnClickListene
             Intent intent = new Intent(getActivity(), CoreActivity.class);
             startActivity(intent);
         } else {
-            Log.i("PersonFragment", "cache NOT updated");
+            Toast.makeText(getContext(), "can't update cache", Toast.LENGTH_LONG).show();
         }
 
 

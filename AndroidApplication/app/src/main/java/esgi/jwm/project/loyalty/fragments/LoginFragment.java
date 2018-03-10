@@ -14,7 +14,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -36,12 +35,9 @@ import esgi.jwm.project.loyalty.viewtools.Keyboard;
 
 public class LoginFragment extends Fragment {
 
-    private View fragment;
     private ServerHandler serverHandler;
-    private Typeface typeface;
     private AutoCompleteTextView email;
     private EditText pwd;
-    private TextView textViewResult;
     private SharedPreferences cache;
     private SharedPreferences.Editor editor;
     private ProgressBar progressBar;
@@ -51,8 +47,8 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragment=  inflater.inflate(R.layout.fragment_login, container, false);
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        View fragment = inflater.inflate(R.layout.fragment_login, container, false);
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
 
         coreActivity = (CoreActivity) getActivity();
 
@@ -67,7 +63,6 @@ public class LoginFragment extends Fragment {
 
         email = fragment.findViewById(R.id.email);
         pwd = fragment.findViewById(R.id.password);
-        textViewResult = fragment.findViewById(R.id.result);
 
         if(((CoreActivity) getActivity()).getModeLogged()){
             serverHandler = new ServerHandler(new ServerHandlerPersonTest(getContext()));
@@ -184,7 +179,7 @@ public class LoginFragment extends Fragment {
 
                 AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_error), message_error,
                         getString(R.string.cancel_button), getString(R.string.ok_button), getLayoutInflater(),
-                        DialogBoxBuilder.NO_YES_DIALOG, new IBasicDialogCallBack() {
+                        DialogBoxBuilder.DIALOG_WITH_NO_INPUT_TWO_BUTTONS, new IBasicDialogCallBack() {
                             @Override
                             public void onClickButton1(View view, AlertDialog dialogBox) {
                                 progressBar.setVisibility(View.INVISIBLE);
@@ -193,7 +188,7 @@ public class LoginFragment extends Fragment {
 
                             @Override
                             public void onClickButton2(View view, String res, AlertDialog dialogBox) {
-//                                here we don't care about res cause it will always be empty with DialogBuilder.NO_YES_DIALOG
+//                                here we don't care about res cause it will always be empty with DialogBuilder.DIALOG_WITH_NO_INPUT_TWO_BUTTONS
                                 if(error.networkResponse.statusCode == 402){
                                     serverHandler.resendMail(mail, new APICallback() {
                                         @Override
@@ -230,7 +225,7 @@ public class LoginFragment extends Fragment {
 
         AlertDialog alertDialog = DialogBoxBuilder.build(getActivity(), getString(R.string.dialog_title_reset_password),
                 getString(R.string.dialog_message_reset_password), getString(R.string.cancel_button),
-                getString(R.string.ok_button), getLayoutInflater(), DialogBoxBuilder.BASIC_DIALOG, new IBasicDialogCallBack() {
+                getString(R.string.ok_button), getLayoutInflater(), DialogBoxBuilder.DIALOG_WITH_ONE_INPUT_TWO_BUTTONS, new IBasicDialogCallBack() {
                     @Override
                     public void onClickButton1(View view, AlertDialog dialogBox) {
                         dialogBox.dismiss();

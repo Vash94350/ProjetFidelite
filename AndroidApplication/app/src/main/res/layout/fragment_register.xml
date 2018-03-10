@@ -95,15 +95,22 @@
                     android:inputType="date"
                     android:clickable="false"/>
 
-                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                    android:id="@+id/android_material_design_spinner"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/select_sexe"
-                    android:textColorHint="#05ab9a"
-                    app:met_floatingLabel="normal"
-                    android:nextFocusDown="@id/place_autocomplete_fragment_adress"/>
+                    android:layout_weight="1">
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/sexe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingBottom="5dp"
+                        app:ms_dropDownHintView="@layout/dropdown_hint_item"
+                        app:ms_enableErrorLabel="false"
+                        app:ms_enableFloatingLabel="false" />
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <fragment

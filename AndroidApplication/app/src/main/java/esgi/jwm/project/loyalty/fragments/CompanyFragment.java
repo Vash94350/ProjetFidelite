@@ -3,6 +3,7 @@ package esgi.jwm.project.loyalty.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.activities.IFragmentsOnClickListener;
 import esgi.jwm.project.loyalty.activities.CoreActivity;
+import esgi.jwm.project.loyalty.serverhandler.ServerHandler;
 
 /**
  * Created by wmorgado on 13/02/2018.
@@ -84,24 +86,19 @@ public class CompanyFragment extends Fragment implements IFragmentsOnClickListen
         editor.putBoolean(getString(R.string.person_or_company), false);
         editor.putBoolean(getString(R.string.login_or_register), true);
         if(editor.commit()){
-            Toast.makeText(getContext(), "cache updated", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getActivity(), CoreActivity.class);
+            startActivity(intent);
         } else {
-            Log.i("PersonFragment", "cache NOT updated");
+            Toast.makeText(getContext(), "can't update cache", Toast.LENGTH_LONG).show();
         }
 
-        Intent intent = new Intent(getActivity(), CoreActivity.class);
-        startActivity(intent);
+
     }
+
     @Override
     public void onClickRegister(View v) {
-        editor.putBoolean(getString(R.string.person_or_company), false);
-        editor.putBoolean(getString(R.string.login_or_register), false);
-        if(editor.commit()){
-            Toast.makeText(getContext(), "cache updated", Toast.LENGTH_LONG).show();
-        } else {
-            Log.i("PersonFragment", "cache NOT updated");
-        }
-
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ServerHandler.webSiteURL));
+        startActivity(browserIntent);
     }
 
 

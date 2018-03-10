@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.widget.Toast;
 
 import esgi.jwm.project.loyalty.R;
 import esgi.jwm.project.loyalty.fragments.LoginFragment;
@@ -35,11 +33,9 @@ public class CoreActivity extends FragmentActivity {
         loginOrRegister = getMenuFrom();
 
         if(cache.getBoolean(getString(R.string.person_or_company), false)){
-            Toast.makeText(this, "customer", Toast.LENGTH_LONG).show();
             setTheme(R.style.CustomerTheme);
             root.setBackgroundColor(getResources().getColor(R.color.customerColor));
         } else {
-            Toast.makeText(this, "company", Toast.LENGTH_LONG).show();
             setTheme(R.style.CompanyTheme);
             root.setBackgroundColor(getResources().getColor(R.color.companyColor));
 
@@ -65,7 +61,6 @@ public class CoreActivity extends FragmentActivity {
     protected void onDestroy() {
 
         super.onDestroy();
-        Log.d("onDestroy", "here");
 //        editor.clear().apply();
 
     }

@@ -31,7 +31,7 @@ echo Opening a new terminal for node.js installation and start ...
 
 echo $'\n\n'
 
-open -a Terminal _install_run_server.sh
+open -a Terminal _install_run_API.sh
 
 echo Everything should be good now :D
 

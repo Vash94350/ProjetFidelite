@@ -2,8 +2,8 @@ package esgi.jwm.project.loyalty.viewtools;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.nfc.Tag;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,16 +16,13 @@ import esgi.jwm.project.loyalty.fragments.IBasicDialogCallBack;
  * Created by wmorgado on 09/03/2018.
  */
 
+
 public abstract class DialogBoxBuilder {
 
 
     
-    public static final int BASIC_DIALOG = 1;
-    public static final int NO_YES_DIALOG = 2;
-
-
-    public DialogBoxBuilder() {
-    }
+    public static final int DIALOG_WITH_ONE_INPUT_TWO_BUTTONS = 1;
+    public static final int DIALOG_WITH_NO_INPUT_TWO_BUTTONS = 2;
 
     public static AlertDialog build(Context context, String dialogBoxTitle,
                              String dialogBoxMessage, String button1Label,
@@ -59,9 +56,9 @@ public abstract class DialogBoxBuilder {
     public static View getViewByDialogType(int typeDialog, LayoutInflater layoutInflater){
 
         switch (typeDialog){
-            case BASIC_DIALOG:
+            case DIALOG_WITH_ONE_INPUT_TWO_BUTTONS:
                 return layoutInflater.inflate(R.layout.basic_dialog, null);
-            case NO_YES_DIALOG:
+            case DIALOG_WITH_NO_INPUT_TWO_BUTTONS:
                 return layoutInflater.inflate(R.layout.no_yes_dialog, null);
             default:
                 return null;
@@ -75,8 +72,16 @@ public abstract class DialogBoxBuilder {
 
         Button button1 = view.findViewById(R.id.button1);
         Button button2 = view.findViewById(R.id.button2);
-        button1.setText(button1Label);
-        button2.setText(button2Label);
+
+        if(TextUtils.isEmpty(button1Label))
+            button1.setVisibility(View.GONE);
+        else
+            button1.setText(button1Label);
+
+        if(TextUtils.isEmpty(button2Label))
+            button2.setVisibility(View.GONE);
+        else
+            button2.setText(button2Label);
 
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
         TextView dialogTitle = view.findViewById(R.id.titleDialog);
@@ -85,14 +90,13 @@ public abstract class DialogBoxBuilder {
 
         button1.setOnClickListener(v -> dialogCallBack.onClickButton1(v, alertDialog));
 
-
         button2.setOnClickListener(v -> {
-            if(typeDialog == BASIC_DIALOG){
+            if(typeDialog == DIALOG_WITH_ONE_INPUT_TWO_BUTTONS){
                 TextInputEditText textInputEditText = view.findViewById(R.id.email);
                 String mail =  String.valueOf(textInputEditText.getText());
                 dialogCallBack.onClickButton2(v, mail, alertDialog);
             }
-            if(typeDialog == NO_YES_DIALOG){
+            if(typeDialog == DIALOG_WITH_NO_INPUT_TWO_BUTTONS){
                 dialogCallBack.onClickButton2(v, "", alertDialog);
             }
 
